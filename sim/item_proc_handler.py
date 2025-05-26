@@ -7,7 +7,15 @@ from sim.cooldowns import (
 )
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
-from sim.item_procs import *
+from sim.item_procs import (
+    BindingsOfContainedMagic,
+    BladeOfEternalDarkness,
+    EndlessGulch,
+    OrnateBloodstoneDagger,
+    TrueBandOfSulfuras,
+    UnceasingFrost,
+    WrathOfCenarius,
+)
 from sim.spell import SPELL_COEFFICIENTS, Spell
 from sim.spell_school import DamageType
 
