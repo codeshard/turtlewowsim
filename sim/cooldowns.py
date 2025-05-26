@@ -46,7 +46,9 @@ class Cooldown:
     def track_buff_uptime(self):
         if self.name not in self.character.buff_uptimes:
             self.character.buff_uptimes[self.name] = 0
-        self.character.buff_uptimes[self.name] += self.character.env.now - self.character.buff_start_times[self.name]
+        self.character.buff_uptimes[self.name] += (
+            self.character.env.now - self.character.buff_start_times[self.name]
+        )
 
         del self.character.buff_start_times[self.name]
 
@@ -67,13 +69,16 @@ class Cooldown:
                 def callback(self, cooldown):
                     yield self.env.timeout(cooldown)
                     if self.PRINTS_ACTIVATION:
-                        self.character.print(f"{self.name} cooldown ended after {cooldown} seconds")
+                        self.character.print(
+                            f"{self.name} cooldown ended after {cooldown} seconds"
+                        )
 
                     self._on_cooldown = False
 
                 self.character.env.process(callback(self, cooldown))
 
             if self.duration:
+
                 def callback(self):
                     yield self.character.env.timeout(self.duration)
                     self.deactivate()
@@ -99,7 +104,9 @@ class Cooldown:
             def callback(self, cooldown):
                 yield self.env.timeout(cooldown)
                 if self.PRINTS_ACTIVATION:
-                    self.character.print(f"{self.name} cooldown ended after {cooldown} seconds")
+                    self.character.print(
+                        f"{self.name} cooldown ended after {cooldown} seconds"
+                    )
 
                 self._on_cooldown = False
 
@@ -300,8 +307,14 @@ class PresenceOfMind(Cooldown):
 
     @property
     def cooldown(self):
-        return self._base_cd / self.character.get_haste_factor_for_damage_type(
-            DamageType.ARCANE) if self._apply_cd_haste else self._base_cd
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
 
     @property
     def duration(self):
@@ -316,8 +329,14 @@ class ArcanePower(Cooldown):
 
     @property
     def cooldown(self):
-        return self._base_cd / self.character.get_haste_factor_for_damage_type(
-            DamageType.ARCANE) if self._apply_cd_haste else self._base_cd
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
 
     @property
     def duration(self):
@@ -383,7 +402,9 @@ class WrathOfCenariusBuff(Cooldown):
 
             def callback(self):
                 while True:
-                    remaining_time = self._buff_end_time - self.character.env.now
+                    remaining_time = (
+                        self._buff_end_time - self.character.env.now
+                    )
                     yield self.character.env.timeout(remaining_time)
 
                     if self.character.env.now >= self._buff_end_time:
@@ -430,7 +451,9 @@ class EndlessGulchBuff(Cooldown):
 
             def callback(self):
                 while True:
-                    remaining_time = self._buff_end_time - self.character.env.now
+                    remaining_time = (
+                        self._buff_end_time - self.character.env.now
+                    )
                     yield self.character.env.timeout(remaining_time)
 
                     if self.character.env.now >= self._buff_end_time:
@@ -468,8 +491,8 @@ class CharmOfMagic(Cooldown):
         super().deactivate()
         self.character.damage_type_crit[DamageType.ARCANE] -= 5
         self.character.damage_type_crit_mult[DamageType.ARCANE] -= 0.25
-        
-        
+
+
 class TrueBandOfSulfurasBuff(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True
@@ -498,7 +521,9 @@ class TrueBandOfSulfurasBuff(Cooldown):
 
             def callback(self):
                 while True:
-                    remaining_time = self._buff_end_time - self.character.env.now
+                    remaining_time = (
+                        self._buff_end_time - self.character.env.now
+                    )
                     yield self.character.env.timeout(remaining_time)
 
                     if self.character.env.now >= self._buff_end_time:
@@ -514,7 +539,8 @@ class TrueBandOfSulfurasBuff(Cooldown):
 
     def deactivate(self):
         super().deactivate()
-        self.character.remove_trinket_haste(self.name)        
+        self.character.remove_trinket_haste(self.name)
+
 
 class BindingsOfContainedMagicBuff(Cooldown):
     DMG_BONUS = 100
@@ -548,7 +574,9 @@ class BindingsOfContainedMagicBuff(Cooldown):
 
             def callback(self):
                 while True:
-                    remaining_time = self._buff_end_time - self.character.env.now
+                    remaining_time = (
+                        self._buff_end_time - self.character.env.now
+                    )
                     yield self.character.env.timeout(remaining_time)
 
                     if self.character.env.now >= self._buff_end_time:
@@ -557,13 +585,14 @@ class BindingsOfContainedMagicBuff(Cooldown):
 
             self.character.env.process(callback(self))
         # else:
-            # if self.PRINTS_ACTIVATION:
-                # self.character.print(f"{self.name} refreshed")
-            # self._buff_end_time = self.character.env.now + self.duration
+        # if self.PRINTS_ACTIVATION:
+        # self.character.print(f"{self.name} refreshed")
+        # self._buff_end_time = self.character.env.now + self.duration
 
     def deactivate(self):
         super().deactivate()
-        self.character.remove_sp_bonus(self.DMG_BONUS)  
+        self.character.remove_sp_bonus(self.DMG_BONUS)
+
 
 class Cooldowns:
     def __init__(self, character):
@@ -574,7 +603,9 @@ class Cooldowns:
 
         self.combustion = Combustion(character)
         self.arcane_power = ArcanePower(character, has_accelerated_arcana)
-        self.presence_of_mind = PresenceOfMind(character, has_accelerated_arcana)
+        self.presence_of_mind = PresenceOfMind(
+            character, has_accelerated_arcana
+        )
 
         self.potion_of_quickness = PotionOfQuickness(character)
 

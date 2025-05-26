@@ -4,16 +4,18 @@ import simpy
 
 
 class Environment(simpy.Environment):
-    def __init__(self,
-                 print_casts=True,
-                 print_dots=False,
-                 permanent_coe=True,
-                 permanent_cos=True,
-                 permanent_nightfall=False,
-                 num_mobs=1,
-                 mob_level=63,
-                 *args,
-                 **kwargs):
+    def __init__(
+        self,
+        print_casts=True,
+        print_dots=False,
+        permanent_coe=True,
+        permanent_cos=True,
+        permanent_nightfall=False,
+        num_mobs=1,
+        mob_level=63,
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         from sim.debuffs import Debuffs
         from sim.utils import DamageMeter
@@ -24,8 +26,12 @@ class Environment(simpy.Environment):
 
         self.print = print_casts
         self.print_dots = print_dots
-        self.debuffs = Debuffs(self, permanent_coe=permanent_coe, permanent_cos=permanent_cos,
-                               permanent_nightfall=permanent_nightfall)
+        self.debuffs = Debuffs(
+            self,
+            permanent_coe=permanent_coe,
+            permanent_cos=permanent_cos,
+            permanent_nightfall=permanent_nightfall,
+        )
         self.meter = DamageMeter(self, num_mobs)
         self.process(self.debuffs.run())
 
@@ -34,7 +40,7 @@ class Environment(simpy.Environment):
 
     def time(self):
         dt = str(round(self.now, 1))
-        return '[' + str(dt) + ']'
+        return "[" + str(dt) + "]"
 
     def remaining_time(self):
         return self.duration - self.now
@@ -52,7 +58,7 @@ class Environment(simpy.Environment):
             self.add_character(char)
 
     def run(self, *args, **kwargs):
-        self.duration = kwargs.get('until', 0)
+        self.duration = kwargs.get("until", 0)
 
         random.shuffle(self.characters)
         for char in self.characters:
@@ -63,4 +69,3 @@ class Environment(simpy.Environment):
             char.add_remaining_buff_uptime()
 
         self.debuffs.add_remaining_debuff_uptime()
-

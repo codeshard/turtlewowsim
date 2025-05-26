@@ -57,15 +57,14 @@ SPELL_COEFFICIENTS = {
     Spell.SHADOWBOLT: 0.8571,
     Spell.DRAIN_SOUL: 0.1667,
     Spell.SOUL_FIRE: 1.25,
-    Spell.DARK_HARVEST: .3,  # per tick
-
+    Spell.DARK_HARVEST: 0.3,  # per tick
     # Mage
     Spell.ARCANE_MISSILE: 0.328,
     Spell.ARCANE_SURGE: 0.65,
     Spell.ARCANE_RUPTURE: 0.9,
-    Spell.ARCANE_EXPLOSION: .143,
-    Spell.BLASTWAVE: .129,
-    Spell.FLAMESTRIKE: .157,
+    Spell.ARCANE_EXPLOSION: 0.143,
+    Spell.BLASTWAVE: 0.129,
+    Spell.FLAMESTRIKE: 0.157,
     Spell.FIREBALL: 1.0,
     Spell.PYROBLAST: 1.0,
     Spell.SCORCH: 0.4285,
@@ -76,16 +75,14 @@ SPELL_COEFFICIENTS = {
     Spell.FROST_NOVA: 0.0,  # assume target is immune and takes no dmg
     Spell.CONE_OF_COLD: 0.129,
     Spell.ICICLE: 0.4,
-
     # Druid
     Spell.MOONFIRE: 0.1495,
     Spell.WRATH: 0.6214,  # turtle added 5% guessing they meant a flat amount
     Spell.STARFIRE: 1.0,
     Spell.INSECT_SWARM: 0.158,
-
     # Proc Spells
     Spell.ENGULFING_SHADOWS: 0,  # Blade of Eternal Darkness
-    Spell.BURNING_HATRED: 0.4285  # Ornate Bloodstone Dagger
+    Spell.BURNING_HATRED: 0.4285,  # Ornate Bloodstone Dagger
 }
 
 SPELL_TRIGGERS_ON_HIT = {
@@ -100,7 +97,6 @@ SPELL_TRIGGERS_ON_HIT = {
     Spell.CURSE_OF_SHADOW: False,
     Spell.DRAIN_SOUL: False,
     Spell.SOUL_FIRE: True,
-
     # Mage
     Spell.ARCANE_MISSILE: True,
     Spell.ARCANE_SURGE: True,
@@ -117,28 +113,24 @@ SPELL_TRIGGERS_ON_HIT = {
     Spell.CONE_OF_COLD: True,
     Spell.FLAMESTRIKE: True,
     Spell.BLASTWAVE: True,
-
     # Druid
     Spell.MOONFIRE: True,
     Spell.WRATH: True,
     Spell.STARFIRE: True,
     Spell.INSECT_SWARM: False,
-
     # Proc Spells
     Spell.ENGULFING_SHADOWS: False,  # Blade of Eternal Darkness
-    Spell.BURNING_HATRED: False  # Ornate Bloodstone Dagger
+    Spell.BURNING_HATRED: False,  # Ornate Bloodstone Dagger
 }
 
 SPELL_HAS_TRAVEL_TIME = {
     # Warlock
     Spell.SHADOWBOLT: True,
-
     # Mage
     Spell.ARCANE_MISSILE: True,
     Spell.FIREBALL: True,
     Spell.PYROBLAST: True,
     Spell.FROSTBOLT: True,
-
     # Druid
     Spell.WRATH: True,
 }

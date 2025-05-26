@@ -5,9 +5,16 @@ from sim.spell_school import DamageType
 
 class MoonfireDot(Dot):
     def __init__(self, owner, env, cast_time: float):
-        super().__init__(MageSpell.MOONFIRE.value, owner, env, DamageType.ARCANE, cast_time, register_casts=False)
+        super().__init__(
+            MageSpell.MOONFIRE.value,
+            owner,
+            env,
+            DamageType.ARCANE,
+            cast_time,
+            register_casts=False,
+        )
 
-        self.coefficient = .1302
+        self.coefficient = 0.1302
         self.base_time_between_ticks = 3
         self.ticks_left = 6 + self.owner.opts.extra_dot_ticks
         self.starting_ticks = 6 + self.owner.opts.extra_dot_ticks
@@ -19,4 +26,6 @@ class MoonfireDot(Dot):
             # 15% more dot dmg
             dmg *= 1.15
 
-        return int(self.owner.modify_dmg(dmg, self.damage_type, is_periodic=True))
+        return int(
+            self.owner.modify_dmg(dmg, self.damage_type, is_periodic=True)
+        )

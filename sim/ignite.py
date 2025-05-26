@@ -10,7 +10,13 @@ IGNITE_TICK_TIME = 2
 
 class Ignite:
     def __init__(self, env):
-        self._uptimes = [0, 0, 0, 0, 0]  # each index is number of ignite stacks
+        self._uptimes = [
+            0,
+            0,
+            0,
+            0,
+            0,
+        ]  # each index is number of ignite stacks
         self._num_ticks = [0, 0, 0, 0, 0]
 
         self.owner: Optional[Mage] = None
@@ -35,7 +41,11 @@ class Ignite:
         self.had_any_ignites = False
 
     def is_suboptimal(self):
-        return self.contains_scorch or self.contains_fire_blast or self.contains_partial
+        return (
+            self.contains_scorch
+            or self.contains_fire_blast
+            or self.contains_partial
+        )
 
     def record_uptimes(self):
         if self.active:
@@ -44,7 +54,14 @@ class Ignite:
 
         self.last_monitor_time = self.env.now
 
-    def refresh(self, mage: Mage, dmg: int, spell: Spell, partial: bool, ignite_talent_points: int):
+    def refresh(
+        self,
+        mage: Mage,
+        dmg: int,
+        spell: Spell,
+        partial: bool,
+        ignite_talent_points: int,
+    ):
         self.check_for_drop()
         self.last_crit_time = self.env.now
 
@@ -52,7 +69,7 @@ class Ignite:
 
         if self.active:
             if self.stacks <= 4:
-                self.tick_dmg += dmg * (.02667 * ignite_talent_points)
+                self.tick_dmg += dmg * (0.02667 * ignite_talent_points)
                 self.stacks += 1
                 if partial:
                     self.contains_partial = True
@@ -65,7 +82,7 @@ class Ignite:
             self.ticks_left = 3
         else:  # new ignite
             self.active = True
-            self.tick_dmg = dmg * (.02667 * ignite_talent_points)
+            self.tick_dmg = dmg * (0.02667 * ignite_talent_points)
             self.stacks = 1
             self.owner = mage
             self.ticks_left = 3
@@ -82,13 +99,14 @@ class Ignite:
                 char_name=self.owner.name,
                 dmg=0,
                 aoe=False,
-                increment_cast=True)
+                increment_cast=True,
+            )
 
             # start tick thread
             self.env.process(self.run(self.ignite_id))
 
     def drop(self):
-        self.owner.print(f"Ignite dropped")
+        self.owner.print("Ignite dropped")
         self.active = False
         self.owner = None
         self.tick_dmg = 0
@@ -121,7 +139,12 @@ class Ignite:
                 self._do_dmg()
 
                 if self.ticks_left == 0:
-                    time_left = self.last_crit_time + IGNITE_WINDOW - self.env.now + .001 # add a small amount to prevent rounding errors
+                    time_left = (
+                        self.last_crit_time
+                        + IGNITE_WINDOW
+                        - self.env.now
+                        + 0.001
+                    )  # add a small amount to prevent rounding errors
                     self.env.process(self.check_for_drop_after(time_left))
             else:
                 self.check_for_drop()
@@ -139,20 +162,22 @@ class Ignite:
         # doesn't snapshot on vmangos
         tick_dmg *= self.owner.dmg_modifier  # includes AP/PI
 
-        tick_dmg *= 1 + self.env.debuffs.scorch_stacks * 0.03  # ignite double dips on imp.scorch
+        tick_dmg *= (
+            1 + self.env.debuffs.scorch_stacks * 0.03
+        )  # ignite double dips on imp.scorch
 
         tick_dmg = int(tick_dmg)
         if self.env.print:
             time_left = self.last_crit_time + IGNITE_WINDOW - self.env.now
             self.env.p(
-                f"{self.env.time()} - ({self.owner.name}) ({self.stacks}) ignite tick {tick_dmg} ticks remaining {self.ticks_left} time left {round(time_left, 2)}s")
+                f"{self.env.time()} - ({self.owner.name}) ({self.stacks}) ignite tick {tick_dmg} ticks remaining {self.ticks_left} time left {round(time_left, 2)}s"
+            )
 
         self._num_ticks[self.stacks - 1] += 1
         self.ticks.append(tick_dmg)
         self.env.meter.register_ignite_dmg(
-            char_name=self.owner.name,
-            dmg=tick_dmg,
-            aoe=False)
+            char_name=self.owner.name, dmg=tick_dmg, aoe=False
+        )
 
     @property
     def time_remaining(self):
@@ -212,15 +237,21 @@ class Ignite:
         return self._num_ticks[4]
 
     def _justify(self, string):
-        return string.ljust(JUSTIFY, ' ')
+        return string.ljust(JUSTIFY, " ")
 
     def report(self):
         if not self.had_any_ignites:
             return
-        print(f"------ Ignite ------")
-        print(f"{self._justify('Ignite uptime')}: {round(self.uptime_gte_1_stack * 100, 2)}%")
-        print(f"{self._justify('>=3 stack ignite uptime')}: {round(self.uptime_gte_3_stacks * 100, 2)}%")
-        print(f"{self._justify('5 stack ignite uptime')}: {round(self.uptime_5_stacks * 100, 2)}%")
+        print("------ Ignite ------")
+        print(
+            f"{self._justify('Ignite uptime')}: {round(self.uptime_gte_1_stack * 100, 2)}%"
+        )
+        print(
+            f"{self._justify('>=3 stack ignite uptime')}: {round(self.uptime_gte_3_stacks * 100, 2)}%"
+        )
+        print(
+            f"{self._justify('5 stack ignite uptime')}: {round(self.uptime_5_stacks * 100, 2)}%"
+        )
         print(f"{self._justify('Num Ticks')}: {len(self.ticks)}")
         print(f"{self._justify('Average tick')}: {round(self.avg_tick, 2)}")
         print(f"{self._justify('Max Tick')}: {max(self.ticks)}")

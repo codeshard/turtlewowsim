@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 
 @dataclass(kw_only=True)

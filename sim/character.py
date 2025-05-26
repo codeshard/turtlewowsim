@@ -1,6 +1,6 @@
 import functools
 import random
-from dataclasses import fields, dataclass
+from dataclasses import dataclass, fields
 
 from sim.cooldown_usages import CooldownUsages
 from sim.env import Environment
@@ -11,17 +11,17 @@ from sim.talent_school import TalentSchool
 
 
 class Character:
-    def __init__(self,
-                 tal: dataclass,
-                 name: str,
-                 sp: int,
-                 crit: float,
-                 hit: float,
-                 haste: float,
-                 lag: float,
-                 equipped_items: EquippedItems = None,
-                 ):
-
+    def __init__(
+        self,
+        tal: dataclass,
+        name: str,
+        sp: int,
+        crit: float,
+        hit: float,
+        haste: float,
+        lag: float,
+        equipped_items: EquippedItems = None,
+    ):
         self.name = name
         self.sp = sp
         self.crit = crit
@@ -39,7 +39,7 @@ class Character:
             DamageType.ARCANE: 0,
             DamageType.NATURE: 0,
             DamageType.SHADOW: 0,
-            DamageType.HOLY: 0
+            DamageType.HOLY: 0,
         }
 
         self.damage_type_haste = {
@@ -49,7 +49,7 @@ class Character:
             DamageType.ARCANE: 0,
             DamageType.NATURE: 0,
             DamageType.SHADOW: 0,
-            DamageType.HOLY: 0
+            DamageType.HOLY: 0,
         }
 
         self.damage_type_hit = {
@@ -59,7 +59,7 @@ class Character:
             DamageType.ARCANE: 0,
             DamageType.NATURE: 0,
             DamageType.SHADOW: 0,
-            DamageType.HOLY: 0
+            DamageType.HOLY: 0,
         }
 
         self.damage_type_crit = {
@@ -69,7 +69,7 @@ class Character:
             DamageType.ARCANE: 0,
             DamageType.NATURE: 0,
             DamageType.SHADOW: 0,
-            DamageType.HOLY: 0
+            DamageType.HOLY: 0,
         }
 
         self.damage_type_crit_mult = {
@@ -79,7 +79,7 @@ class Character:
             DamageType.ARCANE: 0,
             DamageType.NATURE: 0,
             DamageType.SHADOW: 0,
-            DamageType.HOLY: 0
+            DamageType.HOLY: 0,
         }
 
         self.talent_school_haste = {
@@ -90,6 +90,7 @@ class Character:
 
         # avoid circular import
         from sim.cooldowns import Cooldowns
+
         self.cds = Cooldowns(self)
 
         self.equipped_items = equipped_items
@@ -117,7 +118,10 @@ class Character:
         if self.equipped_items:
             # avoid circular import
             from sim.item_proc_handler import ItemProcHandler
-            self.item_proc_handler = ItemProcHandler(self, self.env, self.equipped_items)
+
+            self.item_proc_handler = ItemProcHandler(
+                self, self.env, self.equipped_items
+            )
 
     def add_remaining_buff_uptime(self):
         for buff_name, start_time in self.buff_start_times.items():
@@ -129,6 +133,7 @@ class Character:
     def reset(self):
         # avoid circular import
         from sim.cooldowns import Cooldowns
+
         self.cds = Cooldowns(self)
 
         self._dmg_modifier = 1
@@ -162,15 +167,27 @@ class Character:
         for haste in self._consume_haste.values():
             consume_haste_factor *= 1 + haste / 100
 
-        damage_type_haste_factor = 1 + self.damage_type_haste[damage_type] / 100
+        damage_type_haste_factor = (
+            1 + self.damage_type_haste[damage_type] / 100
+        )
 
-        return haste_factor * trinket_haste_factor * cooldown_haste_factor * consume_haste_factor * damage_type_haste_factor
+        return (
+            haste_factor
+            * trinket_haste_factor
+            * cooldown_haste_factor
+            * consume_haste_factor
+            * damage_type_haste_factor
+        )
 
-    def get_haste_factor_for_talent_school(self, talent_school: TalentSchool, damage_type: DamageType):
+    def get_haste_factor_for_talent_school(
+        self, talent_school: TalentSchool, damage_type: DamageType
+    ):
         base_haste_factor = self.get_haste_factor_for_damage_type(damage_type)
         if talent_school == TalentSchool.Affliction:
             ts_haste_factor = 1
-            for haste in self.talent_school_haste[TalentSchool.Affliction].values():
+            for haste in self.talent_school_haste[
+                TalentSchool.Affliction
+            ].values():
                 ts_haste_factor *= 1 + haste / 100
 
             return base_haste_factor * ts_haste_factor
@@ -181,16 +198,20 @@ class Character:
         if base_cast_time <= 0:
             return 0
 
-        haste_scaling_factor = self.get_haste_factor_for_damage_type(damage_type)
+        haste_scaling_factor = self.get_haste_factor_for_damage_type(
+            damage_type
+        )
 
         return base_cast_time / haste_scaling_factor + self.lag
 
     def _rotation_callback(self, mage, name, *args, **kwargs):
-        rotation = getattr(mage, '_' + name)
+        rotation = getattr(mage, "_" + name)
         return rotation(*args, **kwargs)
 
     def _set_rotation(self, name, *args, **kwargs):
-        self.rotation = functools.partial(self._rotation_callback, name=name, *args, **kwargs)
+        self.rotation = functools.partial(
+            self._rotation_callback, name=name, *args, **kwargs
+        )
 
     def _random_delay(self, secs=2):
         if secs:
@@ -204,11 +225,13 @@ class Character:
             use_times = getattr(cooldown_usages, field.name, None)
             if isinstance(use_times, list):
                 for index, use_time in enumerate(use_times):
-                    if use_time is not None and cooldown_obj.usable and self.env.now >= use_time:
+                    if (
+                        use_time is not None
+                        and cooldown_obj.usable
+                        and self.env.now >= use_time
+                    ):
                         if field.name not in self.used_cds:
-                            self.used_cds[field.name] = {
-                                use_time: True
-                            }
+                            self.used_cds[field.name] = {use_time: True}
                             cooldown_obj.activate()
                         elif use_time not in self.used_cds[field.name]:
                             self.used_cds[field.name][use_time] = True
@@ -216,11 +239,13 @@ class Character:
 
             else:
                 use_time = use_times
-                if use_time is not None and cooldown_obj.usable and self.env.now >= use_time:
+                if (
+                    use_time is not None
+                    and cooldown_obj.usable
+                    and self.env.now >= use_time
+                ):
                     if field.name not in self.used_cds:
-                        self.used_cds[field.name] = {
-                            use_time: True
-                        }
+                        self.used_cds[field.name] = {use_time: True}
                         cooldown_obj.activate()
                     elif use_time not in self.used_cds[field.name]:
                         self.used_cds[field.name][use_time] = True
@@ -230,25 +255,43 @@ class Character:
         return random.randint(1, 1000) <= 10 * proc_chance
 
     def _roll_hit(self, hit_chance: float, damage_type: DamageType):
-        return random.randint(1, 1000) <= 10 * (hit_chance + self.damage_type_hit[damage_type])
+        return random.randint(1, 1000) <= 10 * (
+            hit_chance + self.damage_type_hit[damage_type]
+        )
 
     def _roll_crit(self, crit_chance: float, damage_type: DamageType):
-        return random.randint(1, 1000) <= 10 * (crit_chance + self._crit_bonus + self.damage_type_crit[damage_type])
+        return random.randint(1, 1000) <= 10 * (
+            crit_chance + self._crit_bonus + self.damage_type_crit[damage_type]
+        )
 
-    def roll_spell_dmg(self, min_dmg: int, max_dmg: int, spell_coeff: float, damage_type: DamageType):
+    def roll_spell_dmg(
+        self,
+        min_dmg: int,
+        max_dmg: int,
+        spell_coeff: float,
+        damage_type: DamageType,
+    ):
         dmg = random.randint(min_dmg, max_dmg)
-        dmg += (self.sp + self._sp_bonus + self.damage_type_sp[damage_type]) * spell_coeff
+        dmg += (
+            self.sp + self._sp_bonus + self.damage_type_sp[damage_type]
+        ) * spell_coeff
 
         return dmg
 
-    def _get_crit_multiplier(self, talent_school: TalentSchool, damage_type: DamageType):
+    def _get_crit_multiplier(
+        self, talent_school: TalentSchool, damage_type: DamageType
+    ):
         return 1.5 + self.damage_type_crit_mult[damage_type]
 
-    def _check_for_procs(self, spell: Spell, damage_type: DamageType, delay: bool):
+    def _check_for_procs(
+        self, spell: Spell, damage_type: DamageType, delay: bool
+    ):
         if self.item_proc_handler:
             if delay:
                 yield self.env.timeout(0.5)
-            self.item_proc_handler.check_for_procs(self.env.now, spell, damage_type)
+            self.item_proc_handler.check_for_procs(
+                self.env.now, spell, damage_type
+            )
 
     def roll_partial(self, is_dot: bool, is_binary: bool):
         if is_binary or self.env.mob_level < 63:
@@ -260,30 +303,30 @@ class Character:
             # 25 % partial: 1.1 %
             # 50 % partial: .366 %
             # 75 % partial: 0 %
-            if roll <= .9853:
+            if roll <= 0.9853:
                 return 1
-            elif roll <= .9963:
+            elif roll <= 0.9963:
                 self.num_partials += 1
-                return .75
+                return 0.75
             elif roll <= 1:
                 self.num_partials += 1
-                return .5
+                return 0.5
         else:
             # No partial: 82.666 %
             # 25 % partial: 13 %
             # 50 % partial: 4.166 %
             # 75 % partial: 1 %
-            if roll <= .82666:
+            if roll <= 0.82666:
                 return 1
-            elif roll <= .95666:
+            elif roll <= 0.95666:
                 self.num_partials += 1
-                return .75
-            elif roll <= .99832:
+                return 0.75
+            elif roll <= 0.99832:
                 self.num_partials += 1
-                return .5
+                return 0.5
             elif roll <= 1:
                 self.num_partials += 1
-                return .25
+                return 0.25
 
     def modify_dmg(self, dmg: int, damage_type: DamageType, is_periodic: bool):
         if self._dmg_modifier != 1:

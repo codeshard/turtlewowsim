@@ -2,7 +2,7 @@ from enum import Enum
 
 from sim.arcane_dots import MoonfireDot
 from sim.character import Character
-from sim.fire_dots import PyroblastDot, FireballDot, ImmolateDot
+from sim.fire_dots import FireballDot, ImmolateDot, PyroblastDot
 from sim.ignite import Ignite
 from sim.improved_shadow_bolt import ImprovedShadowBolt
 from sim.nature_dots import InsectSwarmDot
@@ -15,8 +15,16 @@ class SharedDebuffNames(Enum):
     SCORCH = "5 stack Scorch"
     FREEZING_COLD = "Freezing Cold"
 
+
 class Debuffs:
-    def __init__(self, env, permanent_coe=True, permanent_cos=True, permanent_shadow_weaving=True, permanent_nightfall=False):
+    def __init__(
+        self,
+        env,
+        permanent_coe=True,
+        permanent_cos=True,
+        permanent_shadow_weaving=True,
+        permanent_nightfall=False,
+    ):
         self.env = env
         self.scorch_stacks = 0
         self.scorch_timer = 0
@@ -64,7 +72,9 @@ class Debuffs:
             if debuff_name not in self.debuff_uptimes:
                 self.debuff_uptimes[debuff_name] = 0
 
-            self.debuff_uptimes[debuff_name] += self.env.now - self.debuff_start_times[debuff_name]
+            self.debuff_uptimes[debuff_name] += (
+                self.env.now - self.debuff_start_times[debuff_name]
+            )
             del self.debuff_start_times[debuff_name]
 
     def add_remaining_debuff_uptime(self):
@@ -90,11 +100,23 @@ class Debuffs:
     def has_freezing_cold(self):
         return self.freezing_cold_timer > 0
 
-    def modify_dmg(self, character: Character, dmg: int, damage_type: DamageType, is_periodic: bool):
+    def modify_dmg(
+        self,
+        character: Character,
+        dmg: int,
+        damage_type: DamageType,
+        is_periodic: bool,
+    ):
         debuffs = self.env.debuffs
-        if debuffs.has_cos and damage_type in (DamageType.SHADOW, DamageType.ARCANE):
+        if debuffs.has_cos and damage_type in (
+            DamageType.SHADOW,
+            DamageType.ARCANE,
+        ):
             dmg *= 1.1
-        elif debuffs.has_coe and damage_type in (DamageType.FIRE, DamageType.FROST):
+        elif debuffs.has_coe and damage_type in (
+            DamageType.FIRE,
+            DamageType.FROST,
+        ):
             dmg *= 1.1
 
         if damage_type == DamageType.FIRE:
@@ -111,9 +133,13 @@ class Debuffs:
                 dmg *= 1 + self.shadow_weaving_stacks * 0.03
 
             if is_periodic:
-                dmg = self.env.debuffs.improved_shadow_bolt.apply_to_dot(warlock=character, dmg=dmg)
+                dmg = self.env.debuffs.improved_shadow_bolt.apply_to_dot(
+                    warlock=character, dmg=dmg
+                )
             else:
-                dmg = self.env.debuffs.improved_shadow_bolt.apply_to_spell(warlock=character, dmg=dmg)
+                dmg = self.env.debuffs.improved_shadow_bolt.apply_to_spell(
+                    warlock=character, dmg=dmg
+                )
 
         return dmg
 
@@ -135,7 +161,9 @@ class Debuffs:
             self.track_debuff_start(SharedDebuffNames.WINTERS_CHILL)
 
         if self.wc_stacks < 5:
-            self.env.p(f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added")
+            self.env.p(
+                f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added"
+            )
 
         self.wc_stacks = min(self.wc_stacks + 1, 5)
         self.wc_timer = 15
@@ -151,34 +179,54 @@ class Debuffs:
             self.env.process(dot_dict[owner].run())
 
     def add_fireball_dot(self, owner):
-        self._add_dot(self.fireball_dots, FireballDot, owner, 0)  # cast time already accounted for from direct dmg
+        self._add_dot(
+            self.fireball_dots, FireballDot, owner, 0
+        )  # cast time already accounted for from direct dmg
 
     def add_pyroblast_dot(self, owner):
-        self._add_dot(self.pyroblast_dots, PyroblastDot, owner, 0)  # cast time already accounted for from direct dmg
+        self._add_dot(
+            self.pyroblast_dots, PyroblastDot, owner, 0
+        )  # cast time already accounted for from direct dmg
 
     def is_immolate_active(self, owner):
-        return owner in self.immolate_dots and self.immolate_dots[owner].is_active()
+        return (
+            owner in self.immolate_dots
+            and self.immolate_dots[owner].is_active()
+        )
 
     def add_immolate_dot(self, owner):
-        self._add_dot(self.immolate_dots, ImmolateDot, owner, 0)  # cast time already accounted for from direct dmg
+        self._add_dot(
+            self.immolate_dots, ImmolateDot, owner, 0
+        )  # cast time already accounted for from direct dmg
 
     def is_corruption_active(self, owner):
-        return owner in self.corruption_dots and self.corruption_dots[owner].is_active()
+        return (
+            owner in self.corruption_dots
+            and self.corruption_dots[owner].is_active()
+        )
 
     def add_corruption_dot(self, owner, cast_time):
         self._add_dot(self.corruption_dots, CorruptionDot, owner, cast_time)
 
     def is_siphon_life_active(self, owner):
-        return owner in self.siphon_life_dots and self.siphon_life_dots[owner].is_active()
+        return (
+            owner in self.siphon_life_dots
+            and self.siphon_life_dots[owner].is_active()
+        )
 
     def add_siphon_life_dot(self, owner, cast_time):
         self._add_dot(self.siphon_life_dots, SiphonLifeDot, owner, cast_time)
 
     def is_curse_of_agony_active(self, owner):
-        return owner in self.curse_of_agony_dots and self.curse_of_agony_dots[owner].is_active()
+        return (
+            owner in self.curse_of_agony_dots
+            and self.curse_of_agony_dots[owner].is_active()
+        )
 
     def add_curse_of_agony_dot(self, owner, cast_time):
-        self._add_dot(self.curse_of_agony_dots, CurseOfAgonyDot, owner, cast_time)
+        self._add_dot(
+            self.curse_of_agony_dots, CurseOfAgonyDot, owner, cast_time
+        )
 
     def is_curse_of_shadows_active(self):
         return self.cos_timer > 0
@@ -187,16 +235,24 @@ class Debuffs:
         self.cos_timer = 300
 
     def is_insect_swarm_active(self, owner):
-        return owner in self.insect_swarm_dots and self.insect_swarm_dots[owner].is_active()
+        return (
+            owner in self.insect_swarm_dots
+            and self.insect_swarm_dots[owner].is_active()
+        )
 
     def add_insect_swarm_dot(self, owner, cast_time):
         self._add_dot(self.insect_swarm_dots, InsectSwarmDot, owner, cast_time)
 
     def is_moonfire_active(self, owner):
-        return owner in self.moonfire_dots and self.moonfire_dots[owner].is_active()
+        return (
+            owner in self.moonfire_dots
+            and self.moonfire_dots[owner].is_active()
+        )
 
     def add_moonfire_dot(self, owner):
-        self._add_dot(self.moonfire_dots, MoonfireDot, owner, 0) # cast time already accounted for from direct dmg
+        self._add_dot(
+            self.moonfire_dots, MoonfireDot, owner, 0
+        )  # cast time already accounted for from direct dmg
 
     def add_dark_harvest(self, owner):
         self.dark_harvests[owner] = True
@@ -227,8 +283,12 @@ class Debuffs:
                 self.freezing_cold_timer = max(self.freezing_cold_timer - 1, 0)
                 if self.freezing_cold_timer <= 0:
                     self.freezing_cold_timer = 0
-                    self.env.debuffs.track_debuff_end(SharedDebuffNames.FREEZING_COLD)
+                    self.env.debuffs.track_debuff_end(
+                        SharedDebuffNames.FREEZING_COLD
+                    )
 
-            if self.permanent_shadow_weaving and self.shadow_weaving_stacks < 5:
+            if (
+                self.permanent_shadow_weaving
+                and self.shadow_weaving_stacks < 5
+            ):
                 self.shadow_weaving_stacks = int(self.ticks / 3)
-

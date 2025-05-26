@@ -22,6 +22,7 @@ class FireBlastCooldown(Cooldown):
     def cooldown(self):
         return self._cd
 
+
 class FrostNovaCooldown(Cooldown):
     PRINTS_ACTIVATION = False
 
@@ -51,14 +52,19 @@ class FrostNovaCooldown(Cooldown):
                     # if cooldown got reset already, do nothing
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
-                            self.character.print(f"{self.name} cooldown ended after {cooldown} seconds")
+                            self.character.print(
+                                f"{self.name} cooldown ended after {cooldown} seconds"
+                            )
 
                         self._on_cooldown = False
                         self._cast_number += 1
 
-                self.character.env.process(callback(self, cooldown, self._cast_number))
+                self.character.env.process(
+                    callback(self, cooldown, self._cast_number)
+                )
 
             if self.duration:
+
                 def callback(self):
                     yield self.character.env.timeout(self.duration)
                     self.deactivate()
@@ -85,7 +91,7 @@ class ColdSnapCooldown(Cooldown):
         if self.usable:
             super().activate()
             # reset all frost cooldowns (only frost nova for now)
-            if hasattr(self.character, 'frost_nova_cd'):
+            if hasattr(self.character, "frost_nova_cd"):
                 self.character.frost_nova_cd.reset_cooldown()
 
 
@@ -133,8 +139,14 @@ class ArcaneSurgeCooldown(Cooldown):
 
     @property
     def cooldown(self):
-        return self._base_cd / self.character.get_haste_factor_for_damage_type(
-            DamageType.ARCANE) if self._apply_cd_haste else self._base_cd
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
 
     def enable_due_to_resist(self):
         self._resist_time = self.character.env.now
@@ -179,8 +191,14 @@ class ArcaneRuptureCooldown(Cooldown):
 
     @property
     def cooldown(self):
-        return self._base_cd / self.character.get_haste_factor_for_damage_type(
-            DamageType.ARCANE) if self._apply_cd_haste else self._base_cd
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
 
     # need special handling for when cooldown ends due to possibility of cooldown reset
     def activate(self):
@@ -201,14 +219,19 @@ class ArcaneRuptureCooldown(Cooldown):
                     # if cooldown got reset already, do nothing
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
-                            self.character.print(f"{self.name} cooldown ended after {cooldown} seconds")
+                            self.character.print(
+                                f"{self.name} cooldown ended after {cooldown} seconds"
+                            )
 
                         self._on_cooldown = False
                         self._cast_number += 1
 
-                self.character.env.process(callback(self, cooldown, self._cast_number))
+                self.character.env.process(
+                    callback(self, cooldown, self._cast_number)
+                )
 
             if self.duration:
+
                 def callback(self):
                     yield self.character.env.timeout(self.duration)
                     self.deactivate()

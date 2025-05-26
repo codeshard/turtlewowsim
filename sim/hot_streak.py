@@ -31,8 +31,8 @@ class HotStreak:
         self.num_usages += 1
 
     def _justify(self, string):
-        return string.ljust(JUSTIFY, ' ')
+        return string.ljust(JUSTIFY, " ")
 
     def report(self):
-        print(f"------ Hot Streak ------")
+        print("------ Hot Streak ------")
         print(f"{self._justify('Usages')}: {self.num_usages}")

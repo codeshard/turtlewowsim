@@ -13,6 +13,7 @@ class ArcaneEclipseCooldown(Cooldown):
     def duration(self):
         return 15
 
+
 class NatureEclipseCooldown(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True

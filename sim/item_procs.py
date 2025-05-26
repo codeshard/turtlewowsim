@@ -21,15 +21,26 @@ class ItemProc:
     def name(self):
         return type(self).__name__
 
-    def _roll_proc(self, spell: Spell, damage_type: DamageType, num_mobs: int = 1):
+    def _roll_proc(
+        self, spell: Spell, damage_type: DamageType, num_mobs: int = 1
+    ):
         for _ in range(num_mobs):
             if random.randint(1, 100) <= self.PERCENT_CHANCE:
                 return True
 
         return False
 
-    def check_for_proc(self, current_time: int, num_mobs: int, spell: Spell, damage_type: DamageType):
-        if self.COOLDOWN and self.last_proc_time + self.COOLDOWN > current_time:
+    def check_for_proc(
+        self,
+        current_time: int,
+        num_mobs: int,
+        spell: Spell,
+        damage_type: DamageType,
+    ):
+        if (
+            self.COOLDOWN
+            and self.last_proc_time + self.COOLDOWN > current_time
+        ):
             return
 
         self.proc_rolls += num_mobs
@@ -73,22 +84,31 @@ class EndlessGulch(ItemProc):
     PERCENT_CHANCE = 20
     COOLDOWN = 3
 
+
 class UnceasingFrost(ItemProc):
     PERCENT_CHANCE = 10
     PRINT_PROC = True
+
 
 class TrueBandOfSulfuras(ItemProc):
     PERCENT_CHANCE = 8
     PERCENT_CHANCE_FIRE = 12
 
-    def _roll_proc(self, spell: Spell, damage_type: DamageType, num_mobs: int = 1):
-        chance = self.PERCENT_CHANCE_FIRE if damage_type == DamageType.FIRE else self.PERCENT_CHANCE
+    def _roll_proc(
+        self, spell: Spell, damage_type: DamageType, num_mobs: int = 1
+    ):
+        chance = (
+            self.PERCENT_CHANCE_FIRE
+            if damage_type == DamageType.FIRE
+            else self.PERCENT_CHANCE
+        )
 
         for _ in range(num_mobs):
             if random.randint(1, 100) <= chance:
                 return True
 
         return False
+
 
 class BindingsOfContainedMagic(ItemProc):
     PERCENT_CHANCE = 10

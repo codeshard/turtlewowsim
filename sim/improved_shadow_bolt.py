@@ -40,7 +40,9 @@ class ImprovedShadowBolt:
             self.record_uptimes()
 
             added_dmg = int(dmg * 0.2)
-            self._added_dot_dmg[warlock] = self._added_dot_dmg.get(warlock, 0) + added_dmg
+            self._added_dot_dmg[warlock] = (
+                self._added_dot_dmg.get(warlock, 0) + added_dmg
+            )
             return dmg + added_dmg
         else:
             return dmg
@@ -50,7 +52,9 @@ class ImprovedShadowBolt:
             self.record_uptimes()
 
             added_dmg = int(dmg * 0.2)
-            self._added_spell_dmg[warlock] = self._added_spell_dmg.get(warlock, 0) + added_dmg
+            self._added_spell_dmg[warlock] = (
+                self._added_spell_dmg.get(warlock, 0) + added_dmg
+            )
             return dmg + added_dmg
         else:
             return dmg
@@ -80,17 +84,21 @@ class ImprovedShadowBolt:
         return sum(self._added_spell_dmg.values())
 
     def _justify(self, string):
-        return string.ljust(JUSTIFY, ' ')
+        return string.ljust(JUSTIFY, " ")
 
     def report(self):
         if not self.had_any_isbs:
             return
 
-        print(f"------ ISB ------")
+        print("------ ISB ------")
         for lock, activations in self.activations.items():
             label = f"{lock.name} ISB Procs"
-            activations_percent = round(activations / self.total_activations * 100, 2)
-            print(f"{self._justify(label)}: {activations} ({activations_percent}%)")
+            activations_percent = round(
+                activations / self.total_activations * 100, 2
+            )
+            print(
+                f"{self._justify(label)}: {activations} ({activations_percent}%)"
+            )
 
         for lock, added_dmg in self._added_dot_dmg.items():
             label = f"{lock.name} ISB Dot Dmg | Spell Dmg"
@@ -99,5 +107,9 @@ class ImprovedShadowBolt:
             print(f"{self._justify(label)}: {dot_dmg} | {spell_dmg}")
 
         print(f"{self._justify('ISB uptime')}: {self.uptime_percent}%")
-        print(f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}")
-        print(f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}")
+        print(
+            f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}"
+        )
+        print(
+            f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}"
+        )

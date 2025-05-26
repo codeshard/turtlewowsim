@@ -1,11 +1,18 @@
 from sim.character import Character
 from sim.env import Environment
 from sim.spell_school import DamageType
-from sim.talent_school import TalentSchool
 
 
 class Dot:
-    def __init__(self, name: str, owner: Character, env: Environment, damage_type: DamageType, cast_time: float, register_casts=True):
+    def __init__(
+        self,
+        name: str,
+        owner: Character,
+        env: Environment,
+        damage_type: DamageType,
+        cast_time: float,
+        register_casts=True,
+    ):
         self.owner = owner
         self.env = env
         self.damage_type = damage_type
@@ -25,11 +32,14 @@ class Dot:
             self.env.meter.register_dot_cast(
                 char_name=self.owner.name,
                 spell_name=self.name,
-                cast_time=cast_time)
+                cast_time=cast_time,
+            )
 
     def _get_effective_tick_dmg(self):
         dmg = self.base_tick_dmg + self.sp * self.coefficient
-        return int(self.owner.modify_dmg(dmg, self.damage_type, is_periodic=True))
+        return int(
+            self.owner.modify_dmg(dmg, self.damage_type, is_periodic=True)
+        )
 
     # This method is overridden in the child class
     def _do_dmg(self):
@@ -42,17 +52,22 @@ class Dot:
 
         if self.env.print_dots:
             desc = ""
-            if self.damage_type == DamageType.SHADOW and self.env.debuffs.improved_shadow_bolt.is_active:
+            if (
+                self.damage_type == DamageType.SHADOW
+                and self.env.debuffs.improved_shadow_bolt.is_active
+            ):
                 desc = "(ISB)"
 
             self.env.p(
-                f"{self.env.time()} - ({self.owner.name}) {self.name} dot tick{partial_desc} {tick_dmg} {desc} ticks remaining {self.ticks_left} next in {self.time_between_ticks}")
+                f"{self.env.time()} - ({self.owner.name}) {self.name} dot tick{partial_desc} {tick_dmg} {desc} ticks remaining {self.ticks_left} next in {self.time_between_ticks}"
+            )
 
         self.env.meter.register_dot_dmg(
             char_name=self.owner.name,
             spell_name=self.name,
             dmg=tick_dmg,
-            aoe=False)
+            aoe=False,
+        )
 
     @property
     def time_between_ticks(self):
@@ -71,7 +86,8 @@ class Dot:
             self.env.meter.register_dot_cast(
                 char_name=self.owner.name,
                 spell_name=self.name,
-                cast_time=cast_time)
+                cast_time=cast_time,
+            )
 
     def is_active(self):
         return self.ticks_left > 0

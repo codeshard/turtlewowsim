@@ -5,8 +5,13 @@ from sim.character import Character, CooldownUsages
 from sim.cooldowns import Cooldown
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
-from sim.spell import Spell, SPELL_COEFFICIENTS, SPELL_HITS_MULTIPLE_TARGETS, SPELL_TRIGGERS_ON_HIT, \
-    SPELL_HAS_TRAVEL_TIME
+from sim.spell import (
+    SPELL_COEFFICIENTS,
+    SPELL_HAS_TRAVEL_TIME,
+    SPELL_HITS_MULTIPLE_TARGETS,
+    SPELL_TRIGGERS_ON_HIT,
+    Spell,
+)
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
 from sim.warlock_options import WarlockOptions
@@ -53,17 +58,18 @@ class DarkHarvestCooldown(Cooldown):
 
 
 class Warlock(Character):
-    def __init__(self,
-                 tal: WarlockTalents,
-                 opts: WarlockOptions = WarlockOptions(),
-                 name: str = '',
-                 sp: int = 0,
-                 crit: float = 0,
-                 hit: float = 0,
-                 haste: float = 0,
-                 lag: float = 0.07,  # lag added by server tick time
-                 equipped_items: EquippedItems = None,
-                 ):
+    def __init__(
+        self,
+        tal: WarlockTalents,
+        opts: WarlockOptions = WarlockOptions(),
+        name: str = "",
+        sp: int = 0,
+        crit: float = 0,
+        hit: float = 0,
+        haste: float = 0,
+        lag: float = 0.07,  # lag added by server tick time
+        equipped_items: EquippedItems = None,
+    ):
         super().__init__(tal, name, sp, crit, hit, haste, lag, equipped_items)
         self.tal = tal
         self.opts = opts
@@ -72,7 +78,9 @@ class Warlock(Character):
         self.nightfall = False
 
         if self.tal.rapid_deterioration:
-            self.talent_school_haste[TalentSchool.Affliction]["rapid_deterioration"] = 6
+            self.talent_school_haste[TalentSchool.Affliction][
+                "rapid_deterioration"
+            ] = 6
 
     def _setup_cds(self):
         self.conflagrate_cd = ConflagrateCooldown(self)
@@ -87,14 +95,21 @@ class Warlock(Character):
     def _get_hit_chance(self, spell: Spell):
         hit = self.hit
         # if affliction add suppression
-        if spell in [Spell.CORRUPTION, Spell.CURSE_OF_AGONY, Spell.CURSE_OF_SHADOW, Spell.SIPHON_LIFE,
-                     Spell.DRAIN_SOUL_CHANNEL,
-                     Spell.DARK_HARVEST_CHANNEL]:
+        if spell in [
+            Spell.CORRUPTION,
+            Spell.CURSE_OF_AGONY,
+            Spell.CURSE_OF_SHADOW,
+            Spell.SIPHON_LIFE,
+            Spell.DRAIN_SOUL_CHANNEL,
+            Spell.DARK_HARVEST_CHANNEL,
+        ]:
             hit += self.tal.suppression * 2
 
         return min(83 + self.hit, 99)
 
-    def _get_crit_multiplier(self, damage_type: DamageType, talent_school: TalentSchool):
+    def _get_crit_multiplier(
+        self, damage_type: DamageType, talent_school: TalentSchool
+    ):
         mult = super()._get_crit_multiplier(talent_school, damage_type)
         if self.opts.crit_dmg_bonus_35:
             mult += 0.1
@@ -126,26 +141,33 @@ class Warlock(Character):
         return int(dmg)
 
     # caller must handle any gcd cooldown
-    def _spell(self,
-               spell: Spell,
-               damage_type: DamageType,
-               talent_school: TalentSchool,
-               min_dmg: int,
-               max_dmg: int,
-               base_cast_time: float,
-               crit_modifier: float,
-               custom_gcd: float | None,
-               on_gcd: bool,
-               calculate_cast_time: bool = True):
-
-        casting_time = self._get_cast_time(base_cast_time, damage_type) if calculate_cast_time else base_cast_time
+    def _spell(
+        self,
+        spell: Spell,
+        damage_type: DamageType,
+        talent_school: TalentSchool,
+        min_dmg: int,
+        max_dmg: int,
+        base_cast_time: float,
+        crit_modifier: float,
+        custom_gcd: float | None,
+        on_gcd: bool,
+        calculate_cast_time: bool = True,
+    ):
+        casting_time = (
+            self._get_cast_time(base_cast_time, damage_type)
+            if calculate_cast_time
+            else base_cast_time
+        )
 
         gcd = custom_gcd if custom_gcd is not None else self.env.GCD
         gcd_wait_time = 0
 
         # account for gcd
         if on_gcd and casting_time < gcd:
-            gcd_wait_time = gcd - casting_time if casting_time > self.lag else gcd
+            gcd_wait_time = (
+                gcd - casting_time if casting_time > self.lag else gcd
+            )
 
         hit = self._roll_hit(self._get_hit_chance(spell), damage_type)
 
@@ -156,14 +178,18 @@ class Warlock(Character):
             if spell != Spell.CORRUPTION:
                 crit = self._roll_crit(self.crit + crit_modifier, damage_type)
 
-            dmg = self.roll_spell_dmg(min_dmg, max_dmg, SPELL_COEFFICIENTS.get(spell, 0), damage_type)
+            dmg = self.roll_spell_dmg(
+                min_dmg, max_dmg, SPELL_COEFFICIENTS.get(spell, 0), damage_type
+            )
             dmg = self.modify_dmg(dmg, damage_type, is_periodic=False)
         else:
             self.num_resists += 1
 
         is_binary_spell = False
 
-        partial_amount = self.roll_partial(is_dot=False, is_binary=is_binary_spell)
+        partial_amount = self.roll_partial(
+            is_dot=False, is_binary=is_binary_spell
+        )
         partial_desc = ""
         if partial_amount < 1:
             dmg = int(dmg * partial_amount)
@@ -178,7 +204,10 @@ class Warlock(Character):
             if gcd_wait_time:
                 description += f" ({round(gcd_wait_time, 2)} gcd)"
 
-            if damage_type == DamageType.SHADOW and self.env.debuffs.improved_shadow_bolt.is_active:
+            if (
+                damage_type == DamageType.SHADOW
+                and self.env.debuffs.improved_shadow_bolt.is_active
+            ):
                 description += " (ISB)"
 
         if not hit:
@@ -200,10 +229,13 @@ class Warlock(Character):
                     self.env.debuffs.improved_shadow_bolt.refresh(self)
 
         if hit and SPELL_TRIGGERS_ON_HIT.get(spell, False):
-            self.env.process(self._check_for_procs(
-                spell=spell,
-                damage_type=damage_type,
-                delay=spell in SPELL_HAS_TRAVEL_TIME))
+            self.env.process(
+                self._check_for_procs(
+                    spell=spell,
+                    damage_type=damage_type,
+                    delay=spell in SPELL_HAS_TRAVEL_TIME,
+                )
+            )
 
         if hit and self.cds.zhc.is_active():
             self.cds.zhc.use_charge()
@@ -216,7 +248,9 @@ class Warlock(Character):
 
         if hit and spell == Spell.CORRUPTION:
             # avoid calling register_spell_dmg as dots will register already
-            self.env.debuffs.add_corruption_dot(self, max(base_cast_time, self.env.GCD))
+            self.env.debuffs.add_corruption_dot(
+                self, max(base_cast_time, self.env.GCD)
+            )
         elif hit and spell == Spell.IMMOLATE:
             # avoid calling register_spell_dmg as dots will register already
             self.env.debuffs.add_immolate_dot(self)
@@ -226,7 +260,8 @@ class Warlock(Character):
                 spell_name=spell.value,
                 dmg=dmg,
                 cast_time=round(casting_time + gcd_wait_time, 2),
-                aoe=False)
+                aoe=False,
+            )
 
         else:
             self.env.meter.register_spell_dmg(
@@ -234,65 +269,74 @@ class Warlock(Character):
                 spell_name=spell.value,
                 dmg=dmg,
                 cast_time=round(casting_time + gcd_wait_time, 2),
-                aoe=spell in SPELL_HITS_MULTIPLE_TARGETS)
+                aoe=spell in SPELL_HITS_MULTIPLE_TARGETS,
+            )
 
         return hit, crit, dmg, gcd_wait_time, partial_amount
 
-    def _fire_spell(self,
-                    spell: Spell,
-                    min_dmg: int,
-                    max_dmg: int,
-                    base_cast_time: float,
-                    crit_modifier: float,
-                    custom_gcd: float | None = None,
-                    on_gcd: bool = True):
-
-        hit, crit, dmg, effective_gcd, partial_amount = yield from self._spell(spell=spell,
-                                                                               damage_type=DamageType.FIRE,
-                                                                               talent_school=TalentSchool.Destruction,
-                                                                               min_dmg=min_dmg,
-                                                                               max_dmg=max_dmg,
-                                                                               base_cast_time=base_cast_time,
-                                                                               crit_modifier=crit_modifier,
-                                                                               custom_gcd=custom_gcd,
-                                                                               on_gcd=on_gcd)
+    def _fire_spell(
+        self,
+        spell: Spell,
+        min_dmg: int,
+        max_dmg: int,
+        base_cast_time: float,
+        crit_modifier: float,
+        custom_gcd: float | None = None,
+        on_gcd: bool = True,
+    ):
+        hit, crit, dmg, effective_gcd, partial_amount = yield from self._spell(
+            spell=spell,
+            damage_type=DamageType.FIRE,
+            talent_school=TalentSchool.Destruction,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            base_cast_time=base_cast_time,
+            crit_modifier=crit_modifier,
+            custom_gcd=custom_gcd,
+            on_gcd=on_gcd,
+        )
 
         # handle gcd
         if effective_gcd:
             yield self.env.timeout(effective_gcd)
 
-    def _shadow_spell(self,
-                      spell: Spell,
-                      talent_school: TalentSchool,
-                      min_dmg: int,
-                      max_dmg: int,
-                      base_cast_time: float,
-                      crit_modifier: float,
-                      custom_gcd: float | None = None,
-                      on_gcd: bool = True,
-                      calculate_cast_time: bool = True):
-        hit, crit, dmg, effective_gcd, partial_amount = yield from self._spell(spell=spell,
-                                                                               damage_type=DamageType.SHADOW,
-                                                                               talent_school=talent_school,
-                                                                               min_dmg=min_dmg,
-                                                                               max_dmg=max_dmg,
-                                                                               base_cast_time=base_cast_time,
-                                                                               crit_modifier=crit_modifier,
-                                                                               custom_gcd=custom_gcd,
-                                                                               on_gcd=on_gcd,
-                                                                               calculate_cast_time=calculate_cast_time)
+    def _shadow_spell(
+        self,
+        spell: Spell,
+        talent_school: TalentSchool,
+        min_dmg: int,
+        max_dmg: int,
+        base_cast_time: float,
+        crit_modifier: float,
+        custom_gcd: float | None = None,
+        on_gcd: bool = True,
+        calculate_cast_time: bool = True,
+    ):
+        hit, crit, dmg, effective_gcd, partial_amount = yield from self._spell(
+            spell=spell,
+            damage_type=DamageType.SHADOW,
+            talent_school=talent_school,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            base_cast_time=base_cast_time,
+            crit_modifier=crit_modifier,
+            custom_gcd=custom_gcd,
+            on_gcd=on_gcd,
+            calculate_cast_time=calculate_cast_time,
+        )
         # handle gcd
         if effective_gcd:
             yield self.env.timeout(effective_gcd)
 
-    def _shadow_dot(self,
-                    spell: Spell,
-                    base_cast_time: float,
-                    cooldown: float = 0.0):
+    def _shadow_dot(
+        self, spell: Spell, base_cast_time: float, cooldown: float = 0.0
+    ):
         casting_time = 0
 
         if base_cast_time > 0:
-            casting_time = self._get_cast_time(base_cast_time, DamageType.SHADOW)
+            casting_time = self._get_cast_time(
+                base_cast_time, DamageType.SHADOW
+            )
 
         # account for gcd
         if casting_time < self.env.GCD and cooldown == 0:
@@ -317,7 +361,8 @@ class Warlock(Character):
             self.env.meter.register_dot_cast(
                 char_name=self.name,
                 spell_name=spell.value,
-                cast_time=max(casting_time, self.env.GCD))
+                cast_time=max(casting_time, self.env.GCD),
+            )
         else:
             self.print(f"{spell.value} {description}")
             if spell == Spell.CURSE_OF_SHADOW:
@@ -326,7 +371,9 @@ class Warlock(Character):
                     self.env.debuffs.add_curse_of_agony_dot(self, cooldown)
 
             elif spell == Spell.CORRUPTION:
-                self.env.debuffs.add_corruption_dot(self, max(casting_time, self.env.GCD))
+                self.env.debuffs.add_corruption_dot(
+                    self, max(casting_time, self.env.GCD)
+                )
             elif spell == Spell.CURSE_OF_AGONY:
                 self.env.debuffs.add_curse_of_agony_dot(self, cooldown)
             elif spell == Spell.SIPHON_LIFE:
@@ -339,39 +386,49 @@ class Warlock(Character):
         if cooldown:
             yield self.env.timeout(cooldown)
 
-    def _channel_tick(self,
-                      spell: Spell,
-                      damage_type: DamageType,
-                      min_dmg: int,
-                      max_dmg: int,
-                      tick_time: float):
-
+    def _channel_tick(
+        self,
+        spell: Spell,
+        damage_type: DamageType,
+        min_dmg: int,
+        max_dmg: int,
+        tick_time: float,
+    ):
         yield self.env.timeout(tick_time)
 
         description = ""
         if self.env.print:
             description = f"({round(tick_time, 2)} tick)"
 
-            if damage_type == DamageType.SHADOW and self.env.debuffs.improved_shadow_bolt.is_active:
+            if (
+                damage_type == DamageType.SHADOW
+                and self.env.debuffs.improved_shadow_bolt.is_active
+            ):
                 description += " (ISB)"
 
-        dmg = self.roll_spell_dmg(min_dmg, max_dmg, SPELL_COEFFICIENTS.get(spell, 0), damage_type)
+        dmg = self.roll_spell_dmg(
+            min_dmg, max_dmg, SPELL_COEFFICIENTS.get(spell, 0), damage_type
+        )
         dmg = self.modify_dmg(dmg, damage_type, is_periodic=False)
 
         self.print(f"{spell.value} {description} {dmg}")
 
         if SPELL_TRIGGERS_ON_HIT.get(spell, False):
-            self.env.process(self._check_for_procs(
-                spell=spell,
-                damage_type=damage_type,
-                delay=spell in SPELL_HAS_TRAVEL_TIME))
+            self.env.process(
+                self._check_for_procs(
+                    spell=spell,
+                    damage_type=damage_type,
+                    delay=spell in SPELL_HAS_TRAVEL_TIME,
+                )
+            )
 
         self.env.meter.register_dot_dmg(
             char_name=self.name,
             spell_name=spell.value,
             dmg=dmg,
             cast_time=round(tick_time, 2),
-            aoe=spell in SPELL_HITS_MULTIPLE_TARGETS)
+            aoe=spell in SPELL_HITS_MULTIPLE_TARGETS,
+        )
 
     def _shadowbolt(self):
         min_dmg = 482
@@ -384,24 +441,28 @@ class Warlock(Character):
 
         crit_modifier = self.tal.devastation
 
-        yield from self._shadow_spell(spell=Spell.SHADOWBOLT,
-                                        talent_school=TalentSchool.Destruction,
-                                      min_dmg=min_dmg,
-                                      max_dmg=max_dmg,
-                                      crit_modifier=crit_modifier,
-                                      base_cast_time=casting_time)
+        yield from self._shadow_spell(
+            spell=Spell.SHADOWBOLT,
+            talent_school=TalentSchool.Destruction,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            crit_modifier=crit_modifier,
+            base_cast_time=casting_time,
+        )
 
     def _immolate(self):
-        mult = 1 + .04 * self.tal.improved_immolate
+        mult = 1 + 0.04 * self.tal.improved_immolate
         dmg = int(279 * mult)
         casting_time = 2 - self.tal.bane * 0.1
         crit_modifier = self.tal.devastation
 
-        yield from self._fire_spell(spell=Spell.IMMOLATE,
-                                    min_dmg=dmg,
-                                    max_dmg=dmg,
-                                    crit_modifier=crit_modifier,
-                                    base_cast_time=casting_time)
+        yield from self._fire_spell(
+            spell=Spell.IMMOLATE,
+            min_dmg=dmg,
+            max_dmg=dmg,
+            crit_modifier=crit_modifier,
+            base_cast_time=casting_time,
+        )
 
     def _soul_fire(self):
         min_dmg = 703
@@ -410,23 +471,29 @@ class Warlock(Character):
         casting_time = 6 - self.tal.bane * 0.4
         crit_modifier = self.tal.devastation
 
-        yield from self._fire_spell(spell=Spell.SOUL_FIRE,
-                                    min_dmg=min_dmg,
-                                    max_dmg=max_dmg,
-                                    crit_modifier=crit_modifier,
-                                    base_cast_time=casting_time)
+        yield from self._fire_spell(
+            spell=Spell.SOUL_FIRE,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            crit_modifier=crit_modifier,
+            base_cast_time=casting_time,
+        )
 
     def _searing_pain(self):
         min_dmg = 204
         max_dmg = 241
         casting_time = 1.5
-        crit_modifier = self.tal.improved_searing_pain * 2 + self.tal.devastation
+        crit_modifier = (
+            self.tal.improved_searing_pain * 2 + self.tal.devastation
+        )
 
-        yield from self._fire_spell(spell=Spell.SEARING_PAIN,
-                                    min_dmg=min_dmg,
-                                    max_dmg=max_dmg,
-                                    crit_modifier=crit_modifier,
-                                    base_cast_time=casting_time)
+        yield from self._fire_spell(
+            spell=Spell.SEARING_PAIN,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            crit_modifier=crit_modifier,
+            base_cast_time=casting_time,
+        )
 
     def _conflagrate(self):
         min_dmg = 447
@@ -436,18 +503,22 @@ class Warlock(Character):
         crit_modifier = self.tal.devastation
 
         if self.env.debuffs.is_immolate_active(self):
-            tick_dmg = self.env.debuffs.immolate_dots[self].get_effective_tick_dmg()
+            tick_dmg = self.env.debuffs.immolate_dots[
+                self
+            ].get_effective_tick_dmg()
 
             min_dmg += tick_dmg
             max_dmg += tick_dmg
 
             self.env.debuffs.immolate_dots[self].ticks_left -= 1
 
-        yield from self._fire_spell(spell=Spell.CONFLAGRATE,
-                                    min_dmg=min_dmg,
-                                    max_dmg=max_dmg,
-                                    crit_modifier=crit_modifier,
-                                    base_cast_time=casting_time)
+        yield from self._fire_spell(
+            spell=Spell.CONFLAGRATE,
+            min_dmg=min_dmg,
+            max_dmg=max_dmg,
+            crit_modifier=crit_modifier,
+            base_cast_time=casting_time,
+        )
 
     def _corruption(self):
         cast_time = 1.5 - self.tal.improved_corruption * 0.3
@@ -462,10 +533,14 @@ class Warlock(Character):
         )
 
     def _curse_of_shadow(self):
-        yield from self._shadow_dot(spell=Spell.CURSE_OF_SHADOW, base_cast_time=0)
+        yield from self._shadow_dot(
+            spell=Spell.CURSE_OF_SHADOW, base_cast_time=0
+        )
 
     def _curse_of_agony(self):
-        yield from self._shadow_dot(spell=Spell.CURSE_OF_AGONY, base_cast_time=0)
+        yield from self._shadow_dot(
+            spell=Spell.CURSE_OF_AGONY, base_cast_time=0
+        )
 
     def _siphon_life(self):
         yield from self._shadow_dot(spell=Spell.SIPHON_LIFE, base_cast_time=0)
@@ -499,11 +574,16 @@ class Warlock(Character):
             char_name=self.name,
             spell_name=Spell.DRAIN_SOUL.value,
             dmg=0,
-            cast_time=0)
+            cast_time=0,
+        )
 
         # check for resist
-        if not self._roll_hit(self._get_hit_chance(Spell.DRAIN_SOUL_CHANNEL), DamageType.SHADOW):
-            self.print(f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST")
+        if not self._roll_hit(
+            self._get_hit_chance(Spell.DRAIN_SOUL_CHANNEL), DamageType.SHADOW
+        ):
+            self.print(
+                f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+            )
             yield self.env.timeout(self.env.GCD)
             return
         else:
@@ -511,14 +591,18 @@ class Warlock(Character):
 
         num_ticks = 6
 
-        haste_factor = self.get_haste_factor_for_talent_school(TalentSchool.Affliction, DamageType.SHADOW)
+        haste_factor = self.get_haste_factor_for_talent_school(
+            TalentSchool.Affliction, DamageType.SHADOW
+        )
         channel_time /= haste_factor
 
         time_between_ticks = channel_time / num_ticks
 
         for i in range(num_ticks):
             if i == 0:
-                yield from self._drain_soul_tick(tick_time=time_between_ticks + self.lag)  # initial delay
+                yield from self._drain_soul_tick(
+                    tick_time=time_between_ticks + self.lag
+                )  # initial delay
             else:
                 yield from self._drain_soul_tick(tick_time=time_between_ticks)
 
@@ -544,13 +628,18 @@ class Warlock(Character):
             char_name=self.name,
             spell_name=Spell.DARK_HARVEST.value,
             dmg=0,
-            cast_time=0)
+            cast_time=0,
+        )
 
         self.dark_harvest_cd.activate()
 
         # check for resist
-        if not self._roll_hit(self._get_hit_chance(Spell.DARK_HARVEST_CHANNEL), DamageType.SHADOW):
-            self.print(f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST")
+        if not self._roll_hit(
+            self._get_hit_chance(Spell.DARK_HARVEST_CHANNEL), DamageType.SHADOW
+        ):
+            self.print(
+                f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+            )
             yield self.env.timeout(self.env.GCD)
             return
         else:
@@ -558,20 +647,30 @@ class Warlock(Character):
 
         num_ticks = 8
 
-        haste_factor = self.get_haste_factor_for_talent_school(TalentSchool.Affliction, DamageType.SHADOW)
+        haste_factor = self.get_haste_factor_for_talent_school(
+            TalentSchool.Affliction, DamageType.SHADOW
+        )
         channel_time /= haste_factor
 
         time_between_ticks = channel_time / num_ticks
 
-        self.add_talent_school_haste(TalentSchool.Affliction, Spell.DARK_HARVEST.value, 30)
+        self.add_talent_school_haste(
+            TalentSchool.Affliction, Spell.DARK_HARVEST.value, 30
+        )
 
         for i in range(num_ticks):
             if i == 0:
-                yield from self._dark_harvest_tick(tick_time=time_between_ticks + self.lag)  # initial delay
+                yield from self._dark_harvest_tick(
+                    tick_time=time_between_ticks + self.lag
+                )  # initial delay
             else:
-                yield from self._dark_harvest_tick(tick_time=time_between_ticks)
+                yield from self._dark_harvest_tick(
+                    tick_time=time_between_ticks
+                )
 
-        self.remove_talent_school_haste(TalentSchool.Affliction, Spell.DARK_HARVEST.value)
+        self.remove_talent_school_haste(
+            TalentSchool.Affliction, Spell.DARK_HARVEST.value
+        )
 
     def _dark_harvest_tick(self, tick_time: float = 3):
         dmg = 144
@@ -591,7 +690,9 @@ class Warlock(Character):
         self.nightfall = True
         self.print("Nightfall proc!")
 
-    def _spam_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _spam_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -599,7 +700,9 @@ class Warlock(Character):
             self._use_cds(cds)
             yield from self._shadowbolt()
 
-    def _corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -610,7 +713,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _agony_corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _agony_corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -623,7 +728,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _corruption_immolate_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _corruption_immolate_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -636,7 +743,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _agony_corruption_immolate_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _agony_corruption_immolate_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -651,7 +760,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _coa_corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _coa_corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -664,7 +775,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _coa_corruption_siphon_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _coa_corruption_siphon_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         self._use_cds(cds)
         yield from self._random_delay(delay)
 
@@ -679,8 +792,9 @@ class Warlock(Character):
             else:
                 yield from self._shadowbolt()
 
-    def _immo_conflag_soulfire_searing(self, cds: CooldownUsages = CooldownUsages(),
-                                           delay=2):
+    def _immo_conflag_soulfire_searing(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         """
         This rotation prioritizes:
         1. Uses Soul Fire on cooldown
@@ -711,7 +825,10 @@ class Warlock(Character):
                 continue
 
             # Use Conflagrate when available and Immolate is active
-            if not self.conflagrate_cd.on_cooldown and self.env.debuffs.is_immolate_active(self):
+            if (
+                not self.conflagrate_cd.on_cooldown
+                and self.env.debuffs.is_immolate_active(self)
+            ):
                 yield from self._conflagrate()
                 continue
 
@@ -723,7 +840,9 @@ class Warlock(Character):
             # Default to Searing Pain spam
             yield from self._searing_pain()
 
-    def _coa_corruption_siphon_harvest_drain(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _coa_corruption_siphon_harvest_drain(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         """
         Affliction rotation that prioritizes:
         1. Keeping Curse of Shadow/Agony up
@@ -769,7 +888,9 @@ class Warlock(Character):
             # fill with Drain Soul
             yield from self._drain_soul_channel()
 
-    def _coa_corruption_harvest_drain(self, cds: CooldownUsages = CooldownUsages(), delay=2):
+    def _coa_corruption_harvest_drain(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
         """
         Affliction rotation that prioritizes:
         1. Keeping Curse of Shadow/Agony up
@@ -807,42 +928,72 @@ class Warlock(Character):
 
     def spam_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
         # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function
-        return partial(self._set_rotation, name="spam_shadowbolt")(cds=cds, delay=delay)
+        return partial(self._set_rotation, name="spam_shadowbolt")(
+            cds=cds, delay=delay
+        )
 
-    def corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="corruption_shadowbolt")(cds=cds, delay=delay)
+    def corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(self._set_rotation, name="corruption_shadowbolt")(
+            cds=cds, delay=delay
+        )
 
-    def agony_corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="agony_corruption_shadowbolt")(cds=cds, delay=delay)
+    def agony_corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(self._set_rotation, name="agony_corruption_shadowbolt")(
+            cds=cds, delay=delay
+        )
 
-    def agony_corruption_immolate_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="agony_corruption_immolate_shadowbolt")(cds=cds, delay=delay)
+    def agony_corruption_immolate_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="agony_corruption_immolate_shadowbolt"
+        )(cds=cds, delay=delay)
 
-    def coa_corruption_immolate_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="coa_corruption_immolate_shadowbolt")(cds=cds, delay=delay)
+    def coa_corruption_immolate_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="coa_corruption_immolate_shadowbolt"
+        )(cds=cds, delay=delay)
 
     # affliction
-    def coa_corruption_siphon_harvest_drain(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return (partial(self._set_rotation,
-                        name="coa_corruption_siphon_harvest_drain")
-                (cds=cds, delay=delay))
+    def coa_corruption_siphon_harvest_drain(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="coa_corruption_siphon_harvest_drain"
+        )(cds=cds, delay=delay)
 
-    def coa_corruption_harvest_drain(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return (partial(self._set_rotation,
-                        name="coa_corruption_harvest_drain")
-                (cds=cds, delay=delay))
+    def coa_corruption_harvest_drain(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="coa_corruption_harvest_drain"
+        )(cds=cds, delay=delay)
 
     # smruin
-    def coa_corruption_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="coa_corruption_shadowbolt")(cds=cds, delay=delay)
+    def coa_corruption_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(self._set_rotation, name="coa_corruption_shadowbolt")(
+            cds=cds, delay=delay
+        )
 
-    def coa_corruption_siphon_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        return partial(self._set_rotation, name="coa_corruption_siphon_shadowbolt")(cds=cds, delay=delay)
+    def coa_corruption_siphon_shadowbolt(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="coa_corruption_siphon_shadowbolt"
+        )(cds=cds, delay=delay)
 
     # fire
-    def immo_conflag_soulfire_searing(self,
-                                          cds: CooldownUsages = CooldownUsages(),
-                                          delay=2):
-        return (partial(self._set_rotation,
-                        name="immo_conflag_soulfire_searing")
-                (cds=cds, delay=delay))
+    def immo_conflag_soulfire_searing(
+        self, cds: CooldownUsages = CooldownUsages(), delay=2
+    ):
+        return partial(
+            self._set_rotation, name="immo_conflag_soulfire_searing"
+        )(cds=cds, delay=delay)

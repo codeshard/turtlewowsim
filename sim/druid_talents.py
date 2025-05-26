@@ -22,5 +22,5 @@ BoomkinTalents = DruidTalents(
     natures_grace=True,
     imp_starfire=3,
     balance_of_all_things=5,
-    eclipse=True
+    eclipse=True,
 )

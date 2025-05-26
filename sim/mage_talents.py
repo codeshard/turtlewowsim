@@ -47,7 +47,7 @@ FireMageTalents = MageTalents(
     hot_streak=3,
     incinerate_crit=4,
     fire_blast_cooldown=6.5,
-    fire_blast_gcd=1
+    fire_blast_gcd=1,
 )
 
 IcicleMageTalents = MageTalents(
@@ -59,7 +59,7 @@ IcicleMageTalents = MageTalents(
     flash_freeze=2,
     ice_barrier=True,
     improved_cone_of_cold=3,
-    frost_nova_cooldown=21  # 2 points in improved frost nova
+    frost_nova_cooldown=21,  # 2 points in improved frost nova
 )
 
 ArcaneMageTalents = MageTalents(
