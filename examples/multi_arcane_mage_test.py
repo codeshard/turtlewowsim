@@ -24,14 +24,20 @@ mages = []
 # m.spam_arcane_explosion(cds=CooldownUsages(arcane_power=5, mqg=5))
 # mages.append(m)
 #
-m = Mage(name=f'normal', sp=1000, crit=40, hit=16, haste=5,
-         tal=ArcaneMageTalents,
-         opts=MageOptions(interrupt_arcane_missiles=False),
-         equipped_items=EquippedItems(
-             ornate_bloodstone_dagger=False,
-             wrath_of_cenarius=True,
-             endless_gulch=False,
-         ))
+m = Mage(
+    name="normal",
+    sp=1000,
+    crit=40,
+    hit=16,
+    haste=5,
+    tal=ArcaneMageTalents,
+    opts=MageOptions(interrupt_arcane_missiles=False),
+    equipped_items=EquippedItems(
+        ornate_bloodstone_dagger=False,
+        wrath_of_cenarius=True,
+        endless_gulch=False,
+    ),
+)
 m.arcane_rupture_surge_missiles(cds=CooldownUsages())
 mages.append(m)
 

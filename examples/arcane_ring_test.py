@@ -13,29 +13,44 @@ cooldowns = CooldownUsages()
 for i in range(num_rings):
     m = None
     if i == 0:
-        m = Mage(name=f'wrath_of_cenarius', sp=base_sp, crit=base_crit, hit=base_hit,
-                 tal=ArcaneMageTalents,
-                 opts=MageOptions(),
-                 equipped_items=EquippedItems(
-                      ornate_bloodstone_dagger=False,
-                      wrath_of_cenarius=True,
-                  ))
+        m = Mage(
+            name="wrath_of_cenarius",
+            sp=base_sp,
+            crit=base_crit,
+            hit=base_hit,
+            tal=ArcaneMageTalents,
+            opts=MageOptions(),
+            equipped_items=EquippedItems(
+                ornate_bloodstone_dagger=False,
+                wrath_of_cenarius=True,
+            ),
+        )
     elif i == 1:
-        m = Mage(name=f't3 ring', sp=base_sp + 30, crit=base_crit+1, hit=base_hit,
-                 tal=ArcaneMageTalents,
-                 opts=MageOptions(),
-                 equipped_items=EquippedItems(
-                      ornate_bloodstone_dagger=False,
-                      wrath_of_cenarius=False,
-                  ))
+        m = Mage(
+            name="t3 ring",
+            sp=base_sp + 30,
+            crit=base_crit + 1,
+            hit=base_hit,
+            tal=ArcaneMageTalents,
+            opts=MageOptions(),
+            equipped_items=EquippedItems(
+                ornate_bloodstone_dagger=False,
+                wrath_of_cenarius=False,
+            ),
+        )
     elif i == 2:
-        m = Mage(name=f't3 ring arcane (ignoring hit)', sp=base_sp + 36, crit=base_crit, hit=base_hit,
-                 tal=ArcaneMageTalents,
-                 opts=MageOptions(),
-                 equipped_items=EquippedItems(
-                      ornate_bloodstone_dagger=False,
-                      wrath_of_cenarius=False,
-                  ))
+        m = Mage(
+            name="t3 ring arcane (ignoring hit)",
+            sp=base_sp + 36,
+            crit=base_crit,
+            hit=base_hit,
+            tal=ArcaneMageTalents,
+            opts=MageOptions(),
+            equipped_items=EquippedItems(
+                ornate_bloodstone_dagger=False,
+                wrath_of_cenarius=False,
+            ),
+        )
 
     if m:
         m.arcane_surge_rupture_missiles(cds=cooldowns)

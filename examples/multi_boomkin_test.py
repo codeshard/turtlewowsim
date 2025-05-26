@@ -1,16 +1,19 @@
 from _example_imports import *
+
 from sim.druid import Druid
 from sim.druid_options import DruidOptions
 from sim.druid_talents import BoomkinTalents
 
 boomkins = []
-options = DruidOptions(ignore_arcane_eclipse=False,
-                       ignore_nature_eclipse=False,
-                       extra_dot_ticks=1,
-                       starfire_on_balance_of_all_things_proc=True,
-                       set_bonus_3_dot_dmg=True,
-                       set_bonus_3_5_boat=True,
-                       ebb_and_flow_idol=True)
+options = DruidOptions(
+    ignore_arcane_eclipse=False,
+    ignore_nature_eclipse=False,
+    extra_dot_ticks=1,
+    starfire_on_balance_of_all_things_proc=True,
+    set_bonus_3_dot_dmg=True,
+    set_bonus_3_5_boat=True,
+    ebb_and_flow_idol=True,
+)
 
 base_sp = 1111
 base_crit = 39.84
@@ -70,10 +73,16 @@ base_haste = 7
 # d.set_nature_eclipse_subrotation(d.insect_swarm_moonfire_wrath_subrotation)
 # boomkins.append(d)
 
-d = Druid(name=f'moonfire_insect_swarm_wrath', sp=base_sp, crit=base_crit, hit=base_hit, haste=base_haste,
-          tal=BoomkinTalents,
-          opts=options,
-          equipped_items=EquippedItems())
+d = Druid(
+    name="moonfire_insect_swarm_wrath",
+    sp=base_sp,
+    crit=base_crit,
+    hit=base_hit,
+    haste=base_haste,
+    tal=BoomkinTalents,
+    opts=options,
+    equipped_items=EquippedItems(),
+)
 d.moonfire_insect_swarm_wrath(cds=CooldownUsages())
 d.set_arcane_eclipse_subrotation(d.moonfire_insect_swarm_starfire_subrotation)
 d.set_nature_eclipse_subrotation(d.insect_swarm_moonfire_wrath_subrotation)

@@ -1,8 +1,14 @@
 from _example_imports import *
 
-reg_mage1 = Mage(name='mage1', sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents)
-reg_mage2 = Mage(name='mage2', sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents)
-reg_mage3 = Mage(name='mage3', sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents)
+reg_mage1 = Mage(
+    name="mage1", sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents
+)
+reg_mage2 = Mage(
+    name="mage2", sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents
+)
+reg_mage3 = Mage(
+    name="mage3", sp=1008, crit=30.87, hit=16, haste=2, tal=FireMageTalents
+)
 
 # reg_mage1.smart_scorch_and_fireblast()
 # reg_mage2.smart_scorch_and_fireblast()

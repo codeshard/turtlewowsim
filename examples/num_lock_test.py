@@ -6,21 +6,38 @@ locks = []
 # lock.coa_corruption_siphon_harvest_drain()
 # locks.append(lock)
 
-lock = Warlock(name=f'affli 3 set nightfall', sp=1005, crit=35, hit=10,
-               tal=AfflictionLock,
-               opts=WarlockOptions(siphon_life_bonus_35=True, use_nightfall_as_affliction=True))
+lock = Warlock(
+    name="affli 3 set nightfall",
+    sp=1005,
+    crit=35,
+    hit=10,
+    tal=AfflictionLock,
+    opts=WarlockOptions(
+        siphon_life_bonus_35=True, use_nightfall_as_affliction=True
+    ),
+)
 lock.coa_corruption_siphon_harvest_drain()
 locks.append(lock)
 
-lock = Warlock(name=f'affli 3 set', sp=1005, crit=35, hit=10,
-               tal=AfflictionLock,
-               opts=WarlockOptions(siphon_life_bonus_35=True))
+lock = Warlock(
+    name="affli 3 set",
+    sp=1005,
+    crit=35,
+    hit=10,
+    tal=AfflictionLock,
+    opts=WarlockOptions(siphon_life_bonus_35=True),
+)
 lock.coa_corruption_siphon_harvest_drain()
 locks.append(lock)
 
-lock = Warlock(name=f'SMRuin no siphon', sp=1005, crit=35, hit=10,
-               tal=SMRuin,
-               opts=WarlockOptions())
+lock = Warlock(
+    name="SMRuin no siphon",
+    sp=1005,
+    crit=35,
+    hit=10,
+    tal=SMRuin,
+    opts=WarlockOptions(),
+)
 lock.coa_corruption_shadowbolt()
 locks.append(lock)
 #

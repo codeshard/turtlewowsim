@@ -6,7 +6,14 @@ locks = []
 # lock.coa_corruption_siphon_shadowbolt()
 # locks.append(lock)
 
-lock = Warlock(name=f'SMRuin', sp=1035, crit=35, hit=13, tal=SMRuin, opts=WarlockOptions(crit_dmg_bonus_35=True))
+lock = Warlock(
+    name="SMRuin",
+    sp=1035,
+    crit=35,
+    hit=13,
+    tal=SMRuin,
+    opts=WarlockOptions(crit_dmg_bonus_35=True),
+)
 lock.coa_corruption_siphon_shadowbolt()
 locks.append(lock)
 
