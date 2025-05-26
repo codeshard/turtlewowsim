@@ -1,8 +1,9 @@
 import random
 
-from sim.dot import Dot
 from sim.spell import Spell as MageSpell
 from sim.spell_school import DamageType
+
+from .dot import Dot
 
 
 class InsectSwarmDot(Dot):

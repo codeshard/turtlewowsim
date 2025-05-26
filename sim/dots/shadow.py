@@ -1,10 +1,11 @@
 import random
 
-from sim.dot import Dot
 from sim.spell import Spell
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
 from sim.warlock import Warlock
+
+from .dot import Dot
 
 
 class WarlockShadowDot(Dot):

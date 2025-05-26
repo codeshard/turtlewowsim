@@ -1,12 +1,18 @@
 from enum import Enum
 
-from sim.arcane_dots import MoonfireDot
 from sim.character import Character
-from sim.fire_dots import FireballDot, ImmolateDot, PyroblastDot
+from sim.dots import (
+    CorruptionDot,
+    CurseOfAgonyDot,
+    FireballDot,
+    ImmolateDot,
+    InsectSwarmDot,
+    MoonfireDot,
+    PyroblastDot,
+    SiphonLifeDot,
+)
 from sim.ignite import Ignite
 from sim.improved_shadow_bolt import ImprovedShadowBolt
-from sim.nature_dots import InsectSwarmDot
-from sim.shadow_dots import CorruptionDot, CurseOfAgonyDot, SiphonLifeDot
 from sim.spell_school import DamageType
 
 
