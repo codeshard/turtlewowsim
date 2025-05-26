@@ -1,5 +1,5 @@
 from sim.dot import Dot
-from sim.mage import Spell as MageSpell
+from sim.spell import Spell as MageSpell
 from sim.spell_school import DamageType
 
 

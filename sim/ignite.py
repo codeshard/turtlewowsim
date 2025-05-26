@@ -2,7 +2,8 @@ from typing import Optional
 
 from sim import JUSTIFY
 from sim.env import Environment
-from sim.mage import Mage, Spell
+from sim.mage import Mage
+from sim.spell import Spell
 
 IGNITE_WINDOW = 6
 IGNITE_TICK_TIME = 2
