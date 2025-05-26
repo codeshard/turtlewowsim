@@ -1,13 +1,10 @@
 import random
 from functools import partial
 
-from sim.character import CooldownUsages
+from sim.character import Character, CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.hot_streak import HotStreak
-from sim.mage_options import MageOptions
-from sim.mage_rotation_cooldowns import *
-from sim.mage_talents import MageTalents
 from sim.spell import (
     SPELL_COEFFICIENTS,
     SPELL_HAS_TRAVEL_TIME,
@@ -17,6 +14,19 @@ from sim.spell import (
 )
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
+
+from .cooldowns import (
+    ArcaneRuptureCooldown,
+    ArcaneSurgeCooldown,
+    ColdSnapCooldown,
+    ConeOfColdCooldown,
+    FireBlastCooldown,
+    FrostNovaCooldown,
+    IciclesCooldown,
+    TemporalConvergenceCooldown,
+)
+from .options import MageOptions
+from .talents import MageTalents
 
 
 class Mage(Character):
