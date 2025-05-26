@@ -2,7 +2,6 @@ import random
 from functools import partial
 
 from sim.character import Character, CooldownUsages
-from sim.cooldowns import Cooldown
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.spell import (
@@ -14,47 +13,14 @@ from sim.spell import (
 )
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
-from sim.warlock_options import WarlockOptions
-from sim.warlock_talents import WarlockTalents
 
-
-class ConflagrateCooldown(Cooldown):
-    def __init__(self, character: Character):
-        super().__init__(character)
-
-    @property
-    def duration(self):
-        return 0
-
-    @property
-    def cooldown(self):
-        return 10
-
-
-class SoulFireCooldown(Cooldown):
-    def __init__(self, character: Character):
-        super().__init__(character)
-
-    @property
-    def duration(self):
-        return 0
-
-    @property
-    def cooldown(self):
-        return 30
-
-
-class DarkHarvestCooldown(Cooldown):
-    def __init__(self, character: Character):
-        super().__init__(character)
-
-    @property
-    def duration(self):
-        return 0
-
-    @property
-    def cooldown(self):
-        return 30
+from .cooldowns import (
+    ConflagrateCooldown,
+    DarkHarvestCooldown,
+    SoulFireCooldown,
+)
+from .options import WarlockOptions
+from .talents import WarlockTalents
 
 
 class Warlock(Character):
