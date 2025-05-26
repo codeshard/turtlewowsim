@@ -1,16 +1,11 @@
 import random
 from functools import partial
 
-from sim.character import CooldownUsages
-from sim.druid_options import DruidOptions
-from sim.druid_rotation_cooldowns import (
-    ArcaneEclipseCooldown,
-    NatureEclipseCooldown,
-)
-from sim.druid_talents import DruidTalents
+from sim.character import Character, CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
-from sim.mage_rotation_cooldowns import *
+
+# from sim.mage_rotation_cooldowns import *
 from sim.spell import (
     SPELL_COEFFICIENTS,
     SPELL_HAS_TRAVEL_TIME,
@@ -20,6 +15,10 @@ from sim.spell import (
 )
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
+
+from .options import DruidOptions
+from .rotation_cooldowns import ArcaneEclipseCooldown, NatureEclipseCooldown
+from .talents import DruidTalents
 
 
 class Druid(Character):
