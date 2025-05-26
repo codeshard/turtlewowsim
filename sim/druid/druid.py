@@ -16,8 +16,8 @@ from sim.spell import (
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
 
+from .cooldowns import ArcaneEclipseCooldown, NatureEclipseCooldown
 from .options import DruidOptions
-from .rotation_cooldowns import ArcaneEclipseCooldown, NatureEclipseCooldown
 from .talents import DruidTalents
 
 
