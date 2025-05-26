@@ -1,8 +1,8 @@
 from typing import Dict
 
 from sim import JUSTIFY
+from sim.character import Character
 from sim.env import Environment
-from sim.warlock import Character
 
 ISB_DURATION = 10
 
