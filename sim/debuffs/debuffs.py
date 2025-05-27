@@ -11,9 +11,10 @@ from sim.dots import (
     PyroblastDot,
     SiphonLifeDot,
 )
-from sim.ignite import Ignite
-from sim.improved_shadow_bolt import ImprovedShadowBolt
 from sim.spell_school import DamageType
+
+from .ignite import Ignite
+from .improved_shadow_bolt import ImprovedShadowBolt
 
 
 class SharedDebuffNames(Enum):
@@ -168,7 +169,7 @@ class Debuffs:
 
         if self.wc_stacks < 5:
             self.env.p(
-                f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added"
+                f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added"  # noqa E501
             )
 
         self.wc_stacks = min(self.wc_stacks + 1, 5)

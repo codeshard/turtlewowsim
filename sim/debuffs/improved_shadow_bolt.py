@@ -108,8 +108,8 @@ class ImprovedShadowBolt:
 
         print(f"{self._justify('ISB uptime')}: {self.uptime_percent}%")
         print(
-            f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}"
+            f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}"  # noqa E501
         )
         print(
-            f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}"
+            f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}"  # noqa E501
         )
