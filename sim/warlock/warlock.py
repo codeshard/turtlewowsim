@@ -1,7 +1,8 @@
 import random
 from functools import partial
 
-from sim.character import Character, CooldownUsages
+from sim.character import Character
+from sim.cooldown_usages import CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.spell import (
