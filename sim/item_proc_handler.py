@@ -1,5 +1,5 @@
 from sim.character import Character
-from sim.cooldowns import (
+from sim.cooldown import (
     BindingsOfContainedMagicBuff,
     EndlessGulchBuff,
     TrueBandOfSulfurasBuff,
