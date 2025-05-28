@@ -1,11 +1,14 @@
 from .cooldowns import (
+    ArcanePower,
     ArcaneRuptureCooldown,
     ArcaneSurgeCooldown,
     ColdSnapCooldown,
+    Combustion,
     ConeOfColdCooldown,
     FireBlastCooldown,
     FrostNovaCooldown,
     IciclesCooldown,
+    PresenceOfMind,
     TemporalConvergenceCooldown,
 )
 from .mage import Mage
@@ -21,6 +24,9 @@ __all__ = [
     "FrostNovaCooldown",
     "IciclesCooldown",
     "TemporalConvergenceCooldown",
+    "ArcanePower",
+    "PresenceOfMind",
+    "Combustion",
     "Mage",
     "MageOptions",
     "MageTalents",

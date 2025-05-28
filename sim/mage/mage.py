@@ -1,8 +1,7 @@
 import random
 from functools import partial
 
-from sim.character import Character
-from sim.cooldown_usages import CooldownUsages
+from sim.character import Character, CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.hot_streak import HotStreak
@@ -545,7 +544,7 @@ class Mage(Character):
             and has_5_stack_ignite
             and has_ignite_extend_option
             and spell not in (Spell.FIREBLAST, Spell.SCORCH)
-        )  # if already casting fireblast or scorch, don't use extend ignite logic
+        )  # if already casting fireblast or scorch, don't use extend ignite logic # noqa E501
 
     def extend_ignite(self):
         # check that spell is not already fireblast or scorch
@@ -839,7 +838,7 @@ class Mage(Character):
 
         for i in range(num_missiles):
             # check for interrupts
-            # don't surge during haste cds as it has gcd that is not reduced by haste
+            # don't surge during haste cds as it has gcd that is not reduced by haste # noqa E501
             if (
                 interrupt_for_surge
                 and self.arcane_surge_cd.usable
@@ -873,7 +872,7 @@ class Mage(Character):
                     not had_sulfuras_proc
                     and self.opts.interrupt_arcane_missiles
                     and self.equipped_items.true_band_of_sulfuras
-                    and self.item_proc_handler.true_band_of_sulfuras_buff.is_active()
+                    and self.item_proc_handler.true_band_of_sulfuras_buff.is_active()  # noqa E501
                 ):
                     # interrupt channel to restart it with haste
                     self.print("Interrupting arcane missiles for haste proc")
@@ -881,7 +880,7 @@ class Mage(Character):
 
         if channel_time < self.env.GCD:
             self.print(
-                f"Post arcane missiles {round(self.env.GCD - channel_time, 2)} gcd"
+                f"Post arcane missiles {round(self.env.GCD - channel_time, 2)} gcd"  # noqa E501
             )
 
     def _arcane_surge(self):
@@ -952,7 +951,7 @@ class Mage(Character):
 
         # check for scorch ignite drop
         if self.opts.drop_suboptimal_ignites and has_bad_ignite:
-            yield from self._frostbolt()  # have to use frostbolt with 6s ignite window
+            yield from self._frostbolt()  # have to use frostbolt with 6s ignite window # noqa E501
             return
 
         # check for hot streak pyroblast
@@ -1324,7 +1323,7 @@ class Mage(Character):
         )
 
     def spam_fireballs(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function
+        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function # noqa E501
         return partial(self._set_rotation, name="spam_fireballs")(
             cds=cds, delay=delay
         )

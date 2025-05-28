@@ -1,5 +1,5 @@
 from sim.character import Character
-from sim.cooldowns import Cooldown
+from sim.cooldown import Cooldown
 from sim.spell_school import DamageType
 
 
@@ -35,7 +35,7 @@ class FrostNovaCooldown(Cooldown):
     def cooldown(self):
         return self._cd
 
-    # need special handling for when cooldown ends due to possibility of cooldown reset
+    # need special handling for when cooldown ends due to possibility of cooldown reset # noqa E501
     def activate(self):
         if self.usable:
             self._active = True
@@ -53,7 +53,7 @@ class FrostNovaCooldown(Cooldown):
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
                             self.character.print(
-                                f"{self.name} cooldown ended after {cooldown} seconds"
+                                f"{self.name} cooldown ended after {cooldown} seconds"  # noqa E501
                             )
 
                         self._on_cooldown = False
@@ -200,7 +200,7 @@ class ArcaneRuptureCooldown(Cooldown):
             else self._base_cd
         )
 
-    # need special handling for when cooldown ends due to possibility of cooldown reset
+    # need special handling for when cooldown ends due to possibility of cooldown reset # noqa E501
     def activate(self):
         if self.usable:
             self._active = True
@@ -220,7 +220,7 @@ class ArcaneRuptureCooldown(Cooldown):
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
                             self.character.print(
-                                f"{self.name} cooldown ended after {cooldown} seconds"
+                                f"{self.name} cooldown ended after {cooldown} seconds"  # noqa E501
                             )
 
                         self._on_cooldown = False
@@ -253,3 +253,89 @@ class TemporalConvergenceCooldown(Cooldown):
     @property
     def cooldown(self):
         return 15
+
+
+class Combustion(Cooldown):
+    STARTS_CD_ON_ACTIVATION = False
+
+    def __init__(self, character: Character):
+        super().__init__(character)
+        self._charges = 0
+        self._crit_bonus = 0
+
+    @property
+    def cooldown(self):
+        return 180
+
+    @property
+    def crit_bonus(self):
+        return self._crit_bonus
+
+    def use_charge(self):
+        if self._charges:
+            self._charges -= 1
+            if self._charges == 0:
+                self.deactivate()
+
+    def cast_fire_spell(self):
+        if self._charges:
+            self._crit_bonus += 10
+
+    def activate(self):
+        super().activate()
+        self._charges = 3
+        self._crit_bonus = 10
+
+
+class PresenceOfMind(Cooldown):
+    STARTS_CD_ON_ACTIVATION = False
+
+    def __init__(self, character: Character, apply_cd_haste: bool):
+        super().__init__(character)
+        self._base_cd = 180
+        self._apply_cd_haste = apply_cd_haste
+
+    @property
+    def cooldown(self):
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
+
+    @property
+    def duration(self):
+        return 9999
+
+
+class ArcanePower(Cooldown):
+    def __init__(self, character: Character, apply_cd_haste: bool):
+        super().__init__(character)
+        self._base_cd = 180
+        self._apply_cd_haste = apply_cd_haste
+
+    @property
+    def cooldown(self):
+        return (
+            self._base_cd
+            / self.character.get_haste_factor_for_damage_type(
+                DamageType.ARCANE
+            )
+            if self._apply_cd_haste
+            else self._base_cd
+        )
+
+    @property
+    def duration(self):
+        return 20
+
+    def activate(self):
+        super().activate()
+        self.character.add_cooldown_haste(self.name, 30)
+
+    def deactivate(self):
+        super().deactivate()
+        self.character.remove_cooldown_haste(self.name)

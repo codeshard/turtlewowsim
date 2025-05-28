@@ -1,8 +1,7 @@
 import random
 from functools import partial
 
-from sim.character import Character
-from sim.cooldown_usages import CooldownUsages
+from sim.character import Character, CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.spell import (
@@ -549,7 +548,7 @@ class Warlock(Character):
             self._get_hit_chance(Spell.DRAIN_SOUL_CHANNEL), DamageType.SHADOW
         ):
             self.print(
-                f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+                f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"  # noqa E501
             )
             yield self.env.timeout(self.env.GCD)
             return
@@ -605,7 +604,7 @@ class Warlock(Character):
             self._get_hit_chance(Spell.DARK_HARVEST_CHANNEL), DamageType.SHADOW
         ):
             self.print(
-                f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+                f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"  # noqa E501
             )
             yield self.env.timeout(self.env.GCD)
             return
@@ -894,7 +893,7 @@ class Warlock(Character):
             yield from self._drain_soul_channel()
 
     def spam_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function
+        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function # noqa E501
         return partial(self._set_rotation, name="spam_shadowbolt")(
             cds=cds, delay=delay
         )

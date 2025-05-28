@@ -1,4 +1,4 @@
-from sim.cooldowns import Cooldown
+from sim.cooldown import Cooldown
 
 
 class ArcaneEclipseCooldown(Cooldown):
