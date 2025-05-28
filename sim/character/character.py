@@ -2,12 +2,13 @@ import functools
 import random
 from dataclasses import dataclass, fields
 
-from sim.cooldown_usages import CooldownUsages
 from sim.env import Environment
 from sim.equipped_items import EquippedItems
 from sim.spell import Spell
 from sim.spell_school import DamageType
 from sim.talent_school import TalentSchool
+
+from .cooldowns import Cooldowns, CooldownUsages
 
 
 class Character:
@@ -88,9 +89,6 @@ class Character:
             TalentSchool.Destruction: {},
         }
 
-        # avoid circular import
-        from sim.cooldowns import Cooldowns
-
         self.cds = Cooldowns(self)
 
         self.equipped_items = equipped_items
@@ -131,9 +129,6 @@ class Character:
             self.buff_uptimes[buff_name] += self.env.now - start_time
 
     def reset(self):
-        # avoid circular import
-        from sim.cooldowns import Cooldowns
-
         self.cds = Cooldowns(self)
 
         self._dmg_modifier = 1
