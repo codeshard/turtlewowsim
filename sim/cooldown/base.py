@@ -1,4 +1,7 @@
-from sim.character import Character
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from sim.character import Character
 
 
 class Cooldown:
@@ -6,7 +9,7 @@ class Cooldown:
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = False
 
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         self.character = character
         self._on_cooldown = False
         self._active = False

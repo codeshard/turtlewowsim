@@ -1,6 +1,9 @@
-from sim.character import Character
+from typing import TYPE_CHECKING
 
 from .base import Cooldown
+
+if TYPE_CHECKING:
+    from sim.character import Character
 
 
 class Berserking(Cooldown):
@@ -12,7 +15,7 @@ class Berserking(Cooldown):
     def cooldown(self):
         return 180
 
-    def __init__(self, character: Character, haste: float):
+    def __init__(self, character: "Character", haste: float):
         super().__init__(character)
         self.haste = haste
 

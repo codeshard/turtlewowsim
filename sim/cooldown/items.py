@@ -1,8 +1,10 @@
-from sim.character import Character
-from sim.spell_school import DamageType
+from typing import TYPE_CHECKING
 
+from sim.spell_school import DamageType
 from .base import Cooldown
 
+if TYPE_CHECKING:
+    from sim.character import Character
 
 class MindQuickeningGem(Cooldown):
     # Mind Quickening Gem
@@ -45,7 +47,7 @@ class TalismanofEphemeralPower(Cooldown):
 
 
 class ZandalarianHeroCharm(Cooldown):
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         super().__init__(character)
         self._initial_sp_bonus = 204
         self._current_sp_bonus = 0
@@ -121,7 +123,7 @@ class WrathOfCenariusBuff(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True
 
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         super().__init__(character)
         self._buff_end_time = -1
 
@@ -174,7 +176,7 @@ class EndlessGulchBuff(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True
 
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         super().__init__(character)
         self._buff_end_time = -1
 
@@ -248,7 +250,7 @@ class TrueBandOfSulfurasBuff(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True
 
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         super().__init__(character)
         self._buff_end_time = -1
 
@@ -298,7 +300,7 @@ class BindingsOfContainedMagicBuff(Cooldown):
     PRINTS_ACTIVATION = True
     TRACK_UPTIME = True
 
-    def __init__(self, character: Character):
+    def __init__(self, character: "Character"):
         super().__init__(character)
         self._buff_end_time = -1
 
