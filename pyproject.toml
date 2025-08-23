@@ -1,25 +1,45 @@
-[tool.poetry]
-name = "turtlewow_sim"
+[project]
+name = "turtlewowsim"
 version = "1.0.0"
 description = ""
-authors = ["mcdallas <mcdallas@protonmail.com>", "pepopo978 <pepopo978@gmail.com>"]
-packages = [
-    { include = "sim" },
-    { include = "examples" },
+authors = [
+    { name = "mcdallas", email = "mcdallas@protonmail.com" },
+    { name = "pepopo978", email = "pepopo978@gmail.com" },
+]
+requires-python = "~=3.10.0"
+dependencies = [
+    "simpy>=4.1.1,<5",
+    "tqdm>=4.46.1,<5",
+    "plotly>=5.24.1,<6",
+    "numpy>=2.1.1,<3",
+    "pandas>=2.2.2,<3",
+    "dill>=0.3.8,<0.4",
+    "loky>=3.5.3,<4",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-simpy = "^4.1.1"
-tqdm = "^4.46.1"
-plotly = "^5.24.1"
-numpy = "^2.1.1"
-pandas = "^2.2.2"
-dill = "^0.3.8"
-loky = "^3.5.3"
+[project.optional-dependencies]
+dev = ["pre-commit>=4.3.0", "ruff>=0.12.10"]
 
-[tool.poetry.dev-dependencies]
+[dependency-groups]
+dev = ["pre-commit>=4.3.0", "ruff>=0.12.10"]
+
+[tool.ruff]
+line-length = 79
+target-version = "py313"
+exclude = ["venv", ".venv"]
+fix = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "N", "B", "C4", "UP", "ARG001"]
+ignore = ["B008", "B904"]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 79
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["uv_build>=0.8.6,<0.9.0"]
+build-backend = "uv_build"
