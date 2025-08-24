@@ -1,14 +1,23 @@
 import random
 from functools import partial
 
-from turtlewowsim.character import CooldownUsages
+from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
 from turtlewowsim.fire_dots import FireballDot, PyroblastDot
 from turtlewowsim.hot_streak import HotStreak
 from turtlewowsim.mage_options import MageOptions
-from turtlewowsim.mage_rotation_cooldowns import *
+from turtlewowsim.mage_rotation_cooldowns import (
+    ArcaneRuptureCooldown,
+    ArcaneSurgeCooldown,
+    ColdSnapCooldown,
+    ConeOfColdCooldown,
+    FireBlastCooldown,
+    FrostNovaCooldown,
+    IciclesCooldown,
+    TemporalConvergenceCooldown,
+)
 from turtlewowsim.mage_talents import MageTalents
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,
@@ -528,13 +537,13 @@ class Mage(Character):
             self.opts.extend_ignite_with_fire_blast
             or self.opts.extend_ignite_with_scorch
         )
-
+        # if already casting fireblast or scorch, don't use extend ignite logic
         return (
             has_5_stack_scorch
             and has_5_stack_ignite
             and has_ignite_extend_option
             and spell not in (Spell.FIREBLAST, Spell.SCORCH)
-        )  # if already casting fireblast or scorch, don't use extend ignite logic
+        )
 
     def extend_ignite(self):
         # check that spell is not already fireblast or scorch
@@ -845,7 +854,8 @@ class Mage(Character):
 
         for i in range(num_missiles):
             # check for interrupts
-            # don't surge during haste cds as it has gcd that is not reduced by haste
+            # don't surge during haste cds as it has gcd that is not reduced
+            # by haste
             if (
                 interrupt_for_surge
                 and self.arcane_surge_cd.usable
@@ -888,7 +898,7 @@ class Mage(Character):
                     not had_sulfuras_proc
                     and self.opts.interrupt_arcane_missiles_for_sulfuras_proc
                     and self.equipped_items.true_band_of_sulfuras
-                    and self.item_proc_handler.true_band_of_sulfuras_buff.is_active()
+                    and self.item_proc_handler.true_band_of_sulfuras_buff.is_active()  # noqa 501
                 ):
                     # interrupt channel to restart it with haste
                     self.print("Interrupting arcane missiles for haste proc")
@@ -899,7 +909,7 @@ class Mage(Character):
 
         if channel_time < self.env.GCD:
             self.print(
-                f"Post arcane missiles {round(self.env.GCD - channel_time, 2)} gcd"
+                f"Post arcane missiles {round(self.env.GCD - channel_time, 2)} gcd"  # noqa E501
             )
 
     def _arcane_surge(self):
@@ -973,7 +983,8 @@ class Mage(Character):
 
         # check for scorch ignite drop
         if self.opts.drop_suboptimal_ignites and has_bad_ignite:
-            yield from self._frostbolt()  # have to use frostbolt with 6s ignite window
+            # have to use frostbolt with 6s ignite window
+            yield from self._frostbolt()
             return
 
         # check for hot streak pyroblast
@@ -1349,7 +1360,7 @@ class Mage(Character):
         )
 
     @simrotation(
-        "(Arcane) Arcane Surge -> Fireblast -> Arcane Rupture -> Arcane Missiles"
+        "(Arcane) Arcane Surge -> Fireblast -> Arcane Rupture -> Arcane Missiles"  # noqa 501
     )
     def arcane_surge_fireblast_rupture_missiles(
         self, cds: CooldownUsages = CooldownUsages(), delay=2
@@ -1382,7 +1393,8 @@ class Mage(Character):
 
     @simrotation("(Fire) Fireball (Spam)")
     def spam_fireballs(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function
+        # set rotation to internal _spam_fireballs and use partial to pass args
+        # and kwargs to that function
         return partial(self._set_rotation, name="spam_fireballs")(
             cds=cds, delay=delay
         )

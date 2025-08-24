@@ -19,7 +19,7 @@ class DruidOptions:
         "3pc Set Bonus: +15% DoT damage", default=False
     )
     set_bonus_3_5_boat: bool = simoption(
-        "3.5pc Set Bonus: -0.25s Starfire cast time from Balance of All Things",
+        "3.5pc Set Bonus: -0.25s Starfire cast time from Balance of All Things",  # noqa E501
         default=False,
     )
 

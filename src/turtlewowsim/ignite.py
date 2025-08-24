@@ -180,7 +180,7 @@ class Ignite:
         if self.env.print:
             time_left = self.last_crit_time + IGNITE_WINDOW - self.env.now
             self.env.p(
-                f"{self.env.time()} - ({self.owner.name}) ({self.stacks}) ignite tick {tick_dmg} ticks remaining {self.ticks_left} time left {round(time_left, 2)}s"
+                f"{self.env.time()} - ({self.owner.name}) ({self.stacks}) ignite tick {tick_dmg} ticks remaining {self.ticks_left} time left {round(time_left, 2)}s"  # noqa E501
             )
 
         self._num_ticks[self.stacks - 1] += 1
@@ -254,13 +254,13 @@ class Ignite:
             return
         print("------ Ignite ------")
         print(
-            f"{self._justify('Ignite uptime')}: {round(self.uptime_gte_1_stack * 100, 2)}%"
+            f"{self._justify('Ignite uptime')}: {round(self.uptime_gte_1_stack * 100, 2)}%"  # noqa E501
         )
         print(
-            f"{self._justify('>=3 stack ignite uptime')}: {round(self.uptime_gte_3_stacks * 100, 2)}%"
+            f"{self._justify('>=3 stack ignite uptime')}: {round(self.uptime_gte_3_stacks * 100, 2)}%"  # noqa E501
         )
         print(
-            f"{self._justify('5 stack ignite uptime')}: {round(self.uptime_5_stacks * 100, 2)}%"
+            f"{self._justify('5 stack ignite uptime')}: {round(self.uptime_5_stacks * 100, 2)}%"  # noqa E501
         )
         print(f"{self._justify('Num Ticks')}: {len(self.ticks)}")
         print(f"{self._justify('Average tick')}: {round(self.avg_tick, 2)}")

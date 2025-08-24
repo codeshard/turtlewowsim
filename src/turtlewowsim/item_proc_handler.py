@@ -7,7 +7,15 @@ from turtlewowsim.cooldowns import (
 )
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
-from turtlewowsim.item_procs import *
+from turtlewowsim.item_procs import (
+    BindingsOfContainedMagic,
+    BladeOfEternalDarkness,
+    EndlessGulch,
+    OrnateBloodstoneDagger,
+    TrueBandOfSulfuras,
+    UnceasingFrost,
+    WrathOfCenarius,
+)
 from turtlewowsim.spell import SPELL_COEFFICIENTS, Spell
 from turtlewowsim.spell_school import DamageType
 

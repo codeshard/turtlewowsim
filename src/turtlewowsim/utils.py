@@ -160,7 +160,7 @@ class DamageMeter:
 
         total_raid_dmg = sum(self.character_dmg.values())
         print(
-            f"{'Average DPS'.ljust(JUSTIFY, ' ')}: {round(total_raid_dmg / total_time / len(self.character_dmg.keys()), 1)}"
+            f"{'Average DPS'.ljust(JUSTIFY, ' ')}: {round(total_raid_dmg / total_time / len(self.character_dmg.keys()), 1)}"  # noqa E501
         )
 
         self.env.debuffs.ignite.report()
@@ -169,7 +169,8 @@ class DamageMeter:
     def detailed_report(self):
         self.report()
         print("**** Detailed report ****")
-        # give detailed per spell report of number of casts, total damage, average damage, average cast time
+        # give detailed per spell report of number of casts, total damage,
+        # average damage, average cast time
         for char_name in self.character_dmg.keys():
             print(f"{char_name}:")
             total_char_dmg = self.character_dmg[char_name]
@@ -216,7 +217,7 @@ class DamageMeter:
                     stats = f"{num_casts} casts"
 
                 if total_dmg:
-                    stats += f", {total_dmg} dmg ({percent_dmg}%), {avg_dmg} avg dmg"
+                    stats += f", {total_dmg} dmg ({percent_dmg}%), {avg_dmg} avg dmg"  # noqa E501
 
                 if avg_cast_time:
                     stats += f", {avg_cast_time} avg cast time"

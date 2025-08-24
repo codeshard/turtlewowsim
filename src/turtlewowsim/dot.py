@@ -63,7 +63,7 @@ class Dot:
                 desc = "(ISB)"
 
             self.env.p(
-                f"{self.env.time()} - ({self.owner.name}) {self.name} dot tick{partial_desc} {tick_dmg} {desc} ticks remaining {self.ticks_left} next in {self.time_between_ticks}"
+                f"{self.env.time()} - ({self.owner.name}) {self.name} dot tick{partial_desc} {tick_dmg} {desc} ticks remaining {self.ticks_left} next in {self.time_between_ticks}"  # noqa E501
             )
 
         self.env.meter.register_dot_dmg(

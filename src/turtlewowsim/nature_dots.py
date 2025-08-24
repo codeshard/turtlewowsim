@@ -41,6 +41,6 @@ class InsectSwarmDot(Dot):
         ):
             if random.randint(1, 100) <= 6 * self.balance_of_all_things:
                 self.env.p(
-                    f"{self.env.time()} - ({self.owner.name}) Balance of All Things proc"
+                    f"{self.env.time()} - ({self.owner.name}) Balance of All Things proc"  # noqa 501
                 )
                 self.owner.balance_of_all_things_stacks += 1

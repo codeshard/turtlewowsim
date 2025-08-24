@@ -213,7 +213,10 @@ class Character:
 
     def _set_rotation(self, name, *args, **kwargs):
         self.rotation = functools.partial(
-            self._rotation_callback, name=name, *args, **kwargs
+            self._rotation_callback,
+            name=name,
+            *args,  # noqa B026
+            **kwargs,
         )
 
     def _random_delay(self, secs=2):
@@ -227,7 +230,7 @@ class Character:
             cooldown_obj = getattr(self.cds, field.name)
             use_times = getattr(cooldown_usages, field.name, None)
             if isinstance(use_times, list):
-                for index, use_time in enumerate(use_times):
+                for _, use_time in enumerate(use_times):
                     if (
                         use_time is not None
                         and cooldown_obj.usable

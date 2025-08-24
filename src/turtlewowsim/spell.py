@@ -70,7 +70,7 @@ SPELL_COEFFICIENTS = {
     Spell.SCORCH: 0.4285,
     Spell.FIREBLAST: 0.4285,
     Spell.FROSTBOLT: 0.814,
-    Spell.FROSTBOLTRK3: 0.4627,  # 2.2 / 3.5 * 0.95 * 0.775 spell lvl 14 has additional reduction
+    Spell.FROSTBOLTRK3: 0.4627,  # 2.2 / 3.5 * 0.95 * 0.775 spell lvl 14 has additional reduction # noqa E501
     Spell.FROSTBOLTRK4: 0.7057,  # 2.6 / 3.5 * 0.95 spell lvl 20
     Spell.FROST_NOVA: 0.0,  # assume target is immune and takes no dmg
     Spell.CONE_OF_COLD: 0.129,

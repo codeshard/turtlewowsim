@@ -10,14 +10,14 @@ class EquippedItems:
         default=False,
     )
     ornate_bloodstone_dagger: bool = simequipped(
-        "Ornate Bloodstone Dagger (20% chance to do 250 fire dmg to target and self)",
+        "Ornate Bloodstone Dagger (20% chance to do 250 fire dmg to target and self)",  # noqa E501
         default=False,
     )
     wrath_of_cenarius: bool = simequipped(
         "Wrath of Cenarius (10% chance for 132 sp for 10s)", default=False
     )
     endless_gulch: bool = simequipped(
-        "Endless Gulch (20% chance to get stacks, at 8 stacks increase cast speed 20% for 10s)",
+        "Endless Gulch (20% chance to get stacks, at 8 stacks increase cast speed 20% for 10s)",  # noqa E501
         default=False,
     )
     true_band_of_sulfuras: bool = simequipped(

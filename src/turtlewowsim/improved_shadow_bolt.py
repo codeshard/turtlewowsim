@@ -100,10 +100,10 @@ class ImprovedShadowBolt:
                 activations / self.total_activations * 100, 2
             )
             print(
-                f"{self._justify(label)}: {activations} ({activations_percent}%)"
+                f"{self._justify(label)}: {activations} ({activations_percent}%)"  # noqa E501
             )
 
-        for lock, added_dmg in self._added_dot_dmg.items():
+        for lock, _ in self._added_dot_dmg.items():
             label = f"{lock.name} ISB Dot Dmg | Spell Dmg"
             dot_dmg = self._added_dot_dmg.get(lock, 0)
             spell_dmg = self._added_spell_dmg.get(lock, 0)
@@ -111,8 +111,8 @@ class ImprovedShadowBolt:
 
         print(f"{self._justify('ISB uptime')}: {self.uptime_percent}%")
         print(
-            f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}"
+            f"{self._justify('Total added dot dmg')}: {self.total_added_dot_dmg}"  # noqa E501
         )
         print(
-            f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}"
+            f"{self._justify('Total added spell dmg')}: {self.total_added_spell_dmg}"  # noqa E501
         )

@@ -70,7 +70,7 @@ class Cooldown:
                     yield self.env.timeout(cooldown)
                     if self.PRINTS_ACTIVATION:
                         self.character.print(
-                            f"{self.name} cooldown ended after {cooldown} seconds"
+                            f"{self.name} cooldown ended after {cooldown} seconds"  # noqa E501
                         )
 
                     self._on_cooldown = False
@@ -386,7 +386,8 @@ class WrathOfCenariusBuff(Cooldown):
     def duration(self):
         return 10
 
-    # need special handling for when cooldown ends due to possibility of cooldown reset
+    # need special handling for when cooldown ends due to
+    # possibility of cooldown reset
     def activate(self):
         if self.usable:
             self.character.add_sp_bonus(self.DMG_BONUS)
@@ -435,7 +436,8 @@ class EndlessGulchBuff(Cooldown):
     def duration(self):
         return 15
 
-    # need special handling for when cooldown ends due to possibility of refresh
+    # need special handling for when cooldown ends due to possibility
+    # of refresh
     def activate(self):
         if self.usable:
             self.character.add_trinket_haste(self.name, 20)
@@ -473,7 +475,8 @@ class EndlessGulchBuff(Cooldown):
 
 
 class CharmOfMagic(Cooldown):
-    #  Use: Increases the critical hit chance of your Arcane spells by 5%, and increases the critical hit damage of your Arcane spells by 50% for 20 sec.
+    # Use: Increases the critical hit chance of your Arcane spells by 5%, and
+    # increases the critical hit damage of your Arcane spells by 50% for 20 sec
     @property
     def cooldown(self):
         return 180
@@ -505,7 +508,8 @@ class TrueBandOfSulfurasBuff(Cooldown):
     def duration(self):
         return 6
 
-    # need special handling for when cooldown ends due to possibility of refresh
+    # need special handling for when cooldown ends due to possibility
+    # of refresh
     def activate(self):
         if self.usable:
             self.character.add_trinket_haste(self.name, 5)

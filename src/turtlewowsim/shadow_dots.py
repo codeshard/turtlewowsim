@@ -78,8 +78,8 @@ class CurseOfAgonyDot(WarlockShadowDot):
         # first four ticks each deal 1/24 of the damage each (about 4.2%),
         # the next four deal 1/12 of the damage (about 8.3%),
         # and then the last four each deal 1/8 of the damage (12.5%).
-        # In other words, the first four ticks combine to 1/6 (16.6%) of the damage,
-        # the next four to 1/3 (33.3%),
+        # In other words, the first four ticks combine to 1/6 (16.6%) of
+        # the damage, the next four to 1/3 (33.3%),
         # and the last four together to about one half of the total damage."
         # https://wowwiki-archive.fandom.com/wiki/Curse_of_Agony
         if self.ticks_left >= 8:

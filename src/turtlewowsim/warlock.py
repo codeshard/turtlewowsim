@@ -603,7 +603,7 @@ class Warlock(Character):
             self._get_hit_chance(Spell.DRAIN_SOUL_CHANNEL), DamageType.SHADOW
         ):
             self.print(
-                f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+                f"{Spell.DRAIN_SOUL_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"  # noqa E501
             )
             yield self.env.timeout(self.env.GCD)
             return
@@ -666,7 +666,7 @@ class Warlock(Character):
             self._get_hit_chance(Spell.DARK_HARVEST_CHANNEL), DamageType.SHADOW
         ):
             self.print(
-                f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"
+                f"{Spell.DARK_HARVEST_CHANNEL.value} ({round(self.env.GCD, 2)}) gcd RESIST"  # noqa E501
             )
             yield self.env.timeout(self.env.GCD)
             return
@@ -700,7 +700,8 @@ class Warlock(Character):
                 )  # initial delay
             elif i == num_ticks - 1 and self.opts.doomcaller_dh_bonus_25:
                 # last tick
-                # 5 set bonus - The last tick of your Dark Harvest spell deals 400% damage
+                # 5 set bonus - The last tick of your Dark Harvest spell
+                # deals 400% damage
                 yield from self._dark_harvest_tick(
                     tick_time=time_between_ticks, dmg_multiplier=5
                 )
@@ -1019,7 +1020,8 @@ class Warlock(Character):
 
     @simrotation("Spam Shadowbolt")
     def spam_shadowbolt(self, cds: CooldownUsages = CooldownUsages(), delay=2):
-        # set rotation to internal _spam_fireballs and use partial to pass args and kwargs to that function
+        # set rotation to internal _spam_fireballs and use partial
+        # to pass args and kwargs to that function
         return partial(self._set_rotation, name="spam_shadowbolt")(
             cds=cds, delay=delay
         )

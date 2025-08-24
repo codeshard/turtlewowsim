@@ -2,7 +2,7 @@ import random
 from functools import partial
 
 from turtlewowsim.arcane_dots import MoonfireDot
-from turtlewowsim.character import CooldownUsages
+from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
 from turtlewowsim.druid_options import DruidOptions
 from turtlewowsim.druid_rotation_cooldowns import (
@@ -12,7 +12,6 @@ from turtlewowsim.druid_rotation_cooldowns import (
 from turtlewowsim.druid_talents import DruidTalents
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
-from turtlewowsim.mage_rotation_cooldowns import *
 from turtlewowsim.nature_dots import InsectSwarmDot
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,
@@ -406,10 +405,10 @@ class Druid(Character):
 
     def _insect_swarm(self):
         # use rank 2 to get full spell coefficient
-        min_dmg = 278
-        max_dmg = 313
+        # min_dmg = 278
+        # max_dmg = 313
         casting_time = 0
-        crit_modifier = 0
+        # crit_modifier = 0
 
         yield from self._nature_dot(
             spell=Spell.INSECT_SWARM, base_cast_time=casting_time

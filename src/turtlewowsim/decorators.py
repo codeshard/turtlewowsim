@@ -2,11 +2,16 @@ from dataclasses import field, is_dataclass
 from dataclasses import fields as dataclass_fields
 from functools import wraps
 
-class_registry = {}  # class name -> dict with "cls", "rotations", "talents", "talent_cls", "options_cls"
+# class name ->
+# dict with "cls", "rotations", "talents", "talent_cls", "options_cls"
+class_registry = {}
 
 
 def _ensure_class_registry_entry(class_name):
-    """Helper to ensure a class entry exists in the registry with default structure."""
+    """
+    Helper to ensure a class entry exists in the registry
+    with default structure.
+    """
     return class_registry.setdefault(
         class_name,
         {
@@ -21,7 +26,8 @@ def _ensure_class_registry_entry(class_name):
 
 def simclass(talent_cls, options_cls):
     """
-    Register a simulation class, requiring its primary talent class and options class.
+    Register a simulation class, requiring its primary talent class
+    and options class.
     Usage: @simclass(MyPrimaryTalentClass, MyOptionsClass)
     """
 
@@ -55,9 +61,13 @@ def _collect_simoptions(cls):
 
 
 def get_options(class_name):
-    """Instantiate the class and return its options as (name, description, default, spec) tuples."""
+    """
+    Instantiate the class and return its options as
+    (name, description, default, spec) tuples.
+    """
     entry = class_registry.get(class_name, {})
-    # This function might be simplified if options_cls is used directly from the registry:
+    # This function might be simplified if options_cls is used directly
+    # from the registry:
     # options_cls = entry.get("options_cls")
     # if options_cls:
     #     return _collect_simoptions(options_cls)
@@ -91,7 +101,10 @@ def _collect_equipped_items(cls):
 
 
 def get_equipped_items(cls):
-    """Return equipped items as (name, description, default) tuples using EquippedItems class."""
+    """
+    Return equipped items as (name, description, default)
+    tuples using EquippedItems class.
+    """
     return _collect_equipped_items(cls)
 
 
@@ -132,7 +145,9 @@ def simrotation(name):
 
 
 def simtalent(name):
-    """Decorator to register a talent spec for a class with a human-readable name."""
+    """
+    Decorator to register a talent spec for a class with a human-readable name.
+    """
 
     def decorator(talent_cls):
         base_class_name = None
@@ -161,12 +176,16 @@ def simtalent(name):
 
 
 def simoption(description, default=None, spec=None):
-    """Field-level decorator for dataclass fields to add sim option metadata."""
+    """
+    Field-level decorator for dataclass fields to add sim option metadata.
+    """
     return field(
         default=default, metadata={"simoption": description, "spec": spec}
     )
 
 
 def simequipped(description, default=None):
-    """Field-level decorator for dataclass fields to add equipped item metadata."""
+    """
+    Field-level decorator for dataclass fields to add equipped item metadata.
+    """
     return field(default=default, metadata={"simequipped": description})

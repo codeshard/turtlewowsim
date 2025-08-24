@@ -150,7 +150,7 @@ class Debuffs:
 
         if self.wc_stacks < 5:
             self.env.p(
-                f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added"
+                f"{self.env.time()} - {SharedDebuffNames.WINTERS_CHILL} stack {self.wc_stacks + 1} added"  # noqa E501
             )
 
         self.wc_stacks = min(self.wc_stacks + 1, 5)
@@ -193,7 +193,8 @@ class Debuffs:
         time_since_last_tick = self.env.now - dot.last_tick_time
         time_until_next_tick = dot.time_between_ticks - time_since_last_tick
 
-        # Total time = time until next tick + time for remaining ticks after that
+        # Total time =
+        # time until next tick + time for remaining ticks after that
         remaining_ticks_after_next = max(0, dot.ticks_left - 1)
         total_time_left = time_until_next_tick + (
             remaining_ticks_after_next * dot.time_between_ticks

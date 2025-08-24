@@ -12,7 +12,9 @@ class WarlockTalents:
     improved_drains: int = 0  # 5/10% increase on drain soul
     malediction: bool = False  # curse applies agony at the same time
     nightfall: int = 0  # 2/4% chance per point
-    rapid_deterioration: bool = False  # 6% affliction haste, haste reduces dot tick time and channel time.  not implementing 50% chance version
+    # 6% affliction haste, haste reduces dot tick time and channel time.
+    # not implementing 50% chance version
+    rapid_deterioration: bool = False
     soul_siphon: int = (
         0  # 2/4/6% drain soul/dark harvest dmg increase per effect on target
     )
@@ -36,7 +38,7 @@ class WarlockTalents:
     soul_link: int = 0  # 5% damage for you and demon
 
     # destruction
-    improved_shadow_bolt: int = 0  # 4% shadow damage per point.  20% chance per point to apply on crit.  2% chance per point to apply on regular hit
+    improved_shadow_bolt: int = 0  # 4% shadow damage per point.  20% chance per point to apply on crit.  2% chance per point to apply on regular hit # noqa E501
     demonic_swiftness: int = 0  # reduce imp cast time by .3/.5 sec
     bane: int = (
         0  # -.1 sec shadowbolt/immolate and -.4 sec soul fire per point

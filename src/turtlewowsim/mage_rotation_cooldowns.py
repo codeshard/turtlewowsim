@@ -35,7 +35,8 @@ class FrostNovaCooldown(Cooldown):
     def cooldown(self):
         return self._cd
 
-    # need special handling for when cooldown ends due to possibility of cooldown reset
+    # need special handling for when cooldown ends due to possibility
+    # of cooldown reset
     def activate(self):
         if self.usable:
             self._active = True
@@ -53,7 +54,7 @@ class FrostNovaCooldown(Cooldown):
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
                             self.character.print(
-                                f"{self.name} cooldown ended after {cooldown} seconds"
+                                f"{self.name} cooldown ended after {cooldown} seconds"  # noqa 501
                             )
 
                         self._on_cooldown = False
@@ -200,7 +201,8 @@ class ArcaneRuptureCooldown(Cooldown):
             else self._base_cd
         )
 
-    # need special handling for when cooldown ends due to possibility of cooldown reset
+    # need special handling for when cooldown ends due to possibility
+    # of cooldown reset
     def activate(self):
         if self.usable:
             self._active = True
@@ -220,7 +222,7 @@ class ArcaneRuptureCooldown(Cooldown):
                     if cast_number == self._cast_number:
                         if self.PRINTS_ACTIVATION:
                             self.character.print(
-                                f"{self.name} cooldown ended after {cooldown} seconds"
+                                f"{self.name} cooldown ended after {cooldown} seconds"  # noqa 501
                             )
 
                         self._on_cooldown = False

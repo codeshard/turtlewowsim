@@ -7,8 +7,8 @@ from functools import partial
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-from sim import JUSTIFY
 
+from turtlewowsim import JUSTIFY
 from turtlewowsim.character import Character
 from turtlewowsim.env import Environment
 from turtlewowsim.utils import mean, mean_percentage
@@ -52,7 +52,7 @@ def run_simulation(args, chunk_range):
             "Total added spell dmg": [],
         }
 
-        for i in chunk_range:
+        for _ in chunk_range:
             env = Environment(
                 print_casts=False,
                 print_dots=False,
@@ -223,7 +223,7 @@ class Simulation:
 
         total_chunks = len(chunks)
         print(
-            f"Total chunks to process: {total_chunks} (using {num_processes} workers)"
+            f"Total chunks to process: {total_chunks} (using {num_processes} workers)"  # noqa E501
         )
 
         args = {
@@ -494,28 +494,28 @@ class Simulation:
                     reverse=True,
                 )
             )
-            for msg, dps in sorted_by_dps.items():
+            for msg, _ in sorted_by_dps.items():
                 print(msg)
 
         print(
-            f"{self._justify('Total spell dmg')}: {mean(self.results['total_spell_dmg'])}"
+            f"{self._justify('Total spell dmg')}: {mean(self.results['total_spell_dmg'])}"  # noqa E501
         )
         print(
-            f"{self._justify('Total dot dmg')}: {mean(self.results['total_dot_dmg'])}"
+            f"{self._justify('Total dot dmg')}: {mean(self.results['total_dot_dmg'])}"  # noqa E501
         )
         if self.results["had_any_ignite"]:
             print(
-                f"{self._justify('Total ignite dmg')}: {mean(self.results['total_ignite_dmg'])}"
+                f"{self._justify('Total ignite dmg')}: {mean(self.results['total_ignite_dmg'])}"  # noqa E501
             )
         print(
             f"{self._justify('Total dmg')}: {mean(self.results['total_dmg'])}"
         )
 
         print(
-            f"{self._justify('Average char dps')}: {mean(self.results['avg_dps'])}"
+            f"{self._justify('Average char dps')}: {mean(self.results['avg_dps'])}"  # noqa E501
         )
         print(
-            f"{self._justify('Highest single char dps')}: {max(self.results['max_single_dps'])}"
+            f"{self._justify('Highest single char dps')}: {max(self.results['max_single_dps'])}"  # noqa E501
         )
 
         if verbosity > 1:
@@ -523,60 +523,60 @@ class Simulation:
                 print("------ Ignite ------")
                 if verbosity > 2:
                     print(
-                        f"{self._justify('Average >=1 stack ignite uptime')}: {mean_percentage(self.results['>=1 stack uptime'])}%"
+                        f"{self._justify('Average >=1 stack ignite uptime')}: {mean_percentage(self.results['>=1 stack uptime'])}%"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average >=2 stack ignite uptime')}: {mean_percentage(self.results['>=2 stack uptime'])}%"
+                        f"{self._justify('Average >=2 stack ignite uptime')}: {mean_percentage(self.results['>=2 stack uptime'])}%"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average >=3 stack ignite uptime')}: {mean_percentage(self.results['>=3 stack uptime'])}%"
+                        f"{self._justify('Average >=3 stack ignite uptime')}: {mean_percentage(self.results['>=3 stack uptime'])}%"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average >=4 stack ignite uptime')}: {mean_percentage(self.results['>=4 stack uptime'])}%"
+                        f"{self._justify('Average >=4 stack ignite uptime')}: {mean_percentage(self.results['>=4 stack uptime'])}%"  # noqa E501
                     )
                 print(
-                    f"{self._justify('Average   5 stack ignite uptime')}: {mean_percentage(self.results['5 stack uptime'])}%"
+                    f"{self._justify('Average   5 stack ignite uptime')}: {mean_percentage(self.results['5 stack uptime'])}%"  # noqa E501
                 )
                 if verbosity > 2:
                     print(
-                        f"{self._justify('Average   1 stack ticks')}: {mean(self.results['1 stack ticks'])}"
+                        f"{self._justify('Average   1 stack ticks')}: {mean(self.results['1 stack ticks'])}"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average   2 stack ticks')}: {mean(self.results['2 stack ticks'])}"
+                        f"{self._justify('Average   2 stack ticks')}: {mean(self.results['2 stack ticks'])}"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average   3 stack ticks')}: {mean(self.results['3 stack ticks'])}"
+                        f"{self._justify('Average   3 stack ticks')}: {mean(self.results['3 stack ticks'])}"  # noqa E501
                     )
                     print(
-                        f"{self._justify('Average   4 stack ticks')}: {mean(self.results['4 stack ticks'])}"
+                        f"{self._justify('Average   4 stack ticks')}: {mean(self.results['4 stack ticks'])}"  # noqa E501
                     )
                 print(
-                    f"{self._justify('Average   5 stack ticks')}: {mean(self.results['5 stack ticks'])}"
+                    f"{self._justify('Average   5 stack ticks')}: {mean(self.results['5 stack ticks'])}"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Average ignite tick')}: {mean(self.results['avg_tick'])}"
+                    f"{self._justify('Average ignite tick')}: {mean(self.results['avg_tick'])}"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Average num tick')}: {mean(self.results['num_ticks'])}"
+                    f"{self._justify('Average num tick')}: {mean(self.results['num_ticks'])}"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Average max tick')}: {mean(self.results['max_tick'])}"
+                    f"{self._justify('Average max tick')}: {mean(self.results['max_tick'])}"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Average num drops')}: {mean(self.results['num_drops'])}"
+                    f"{self._justify('Average num drops')}: {mean(self.results['num_drops'])}"  # noqa E501
                 )
 
         if verbosity > 1:
             if self.results["had_any_isbs"]:
                 print("------ ISB ------")
                 print(
-                    f"{self._justify('ISB uptime')}: {mean(self.results['ISB uptime'])}%"
+                    f"{self._justify('ISB uptime')}: {mean(self.results['ISB uptime'])}%"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Total added dot dmg')}: {mean(self.results['Total added dot dmg'])}"
+                    f"{self._justify('Total added dot dmg')}: {mean(self.results['Total added dot dmg'])}"  # noqa E501
                 )
                 print(
-                    f"{self._justify('Total added spell dmg')}: {mean(self.results['Total added spell dmg'])}"
+                    f"{self._justify('Total added spell dmg')}: {mean(self.results['Total added spell dmg'])}"  # noqa E501
                 )
 
         if verbosity > 2:
@@ -609,7 +609,7 @@ class Simulation:
                         stats = f"{num_casts} casts"
 
                     if total_dmg:
-                        stats += f", {total_dmg} dmg ({percent_dmg}%), {avg_dmg} avg dmg"
+                        stats += f", {total_dmg} dmg ({percent_dmg}%), {avg_dmg} avg dmg"  # noqa E501
                     if avg_cast_time:
                         stats += f", {avg_cast_time} avg cast time"
                     if avg_dps:
@@ -621,13 +621,13 @@ class Simulation:
             for char in self.results["partial_resists"]:
                 label = f"{char} Partial Resists"
                 print(
-                    f"{self._justify(label)}: {mean(self.results['partial_resists'][char])}"
+                    f"{self._justify(label)}: {mean(self.results['partial_resists'][char])}"  # noqa E501
                 )
 
             for char in self.results["resists"]:
                 label = f"{char} Resists"
                 print(
-                    f"{self._justify(label)}: {mean(self.results['resists'][char])}"
+                    f"{self._justify(label)}: {mean(self.results['resists'][char])}"  # noqa E501
                 )
 
         if verbosity > 2:
@@ -648,7 +648,7 @@ class Simulation:
                         100 * avg_uptime / self.duration, 1
                     )
                     print(
-                        f"    {buff_name.ljust(JUSTIFY, ' ')}: {avg_uptime} sec ({avg_uptime_percent}%)"
+                        f"    {buff_name.ljust(JUSTIFY, ' ')}: {avg_uptime} sec ({avg_uptime_percent}%)"  # noqa E501
                     )
 
         if verbosity > 3:
@@ -656,27 +656,27 @@ class Simulation:
             for char in self.results["dps"]:
                 label = f"{char} DPS standard deviation"
                 print(
-                    f"{self._justify(label)}: {round(np.std(self.results['dps'][char]), 2)}"
+                    f"{self._justify(label)}: {round(np.std(self.results['dps'][char]), 2)}"  # noqa E501
                 )
                 label = f"{char} DPS min"
                 print(
-                    f"{self._justify(label)}: {np.min(self.results['dps'][char])}"
+                    f"{self._justify(label)}: {np.min(self.results['dps'][char])}"  # noqa E501
                 )
                 label = f"{char} DPS 25th percentile"
                 print(
-                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 25)}"
+                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 25)}"  # noqa E501
                 )
                 label = f"{char} DPS 50th percentile"
                 print(
-                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 50)}"
+                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 50)}"  # noqa E501
                 )
                 label = f"{char} DPS 75th percentile"
                 print(
-                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 75)}"
+                    f"{self._justify(label)}: {np.percentile(self.results['dps'][char], 75)}"  # noqa E501
                 )
                 label = f"{char} DPS max"
                 print(
-                    f"{self._justify(label)}: {np.max(self.results['dps'][char])}"
+                    f"{self._justify(label)}: {np.max(self.results['dps'][char])}"  # noqa E501
                 )
 
     def extended_report(self):
