@@ -7,18 +7,6 @@ from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
 from turtlewowsim.fire_dots import FireballDot, PyroblastDot
 from turtlewowsim.hot_streak import HotStreak
-from turtlewowsim.mage_options import MageOptions
-from turtlewowsim.mage_rotation_cooldowns import (
-    ArcaneRuptureCooldown,
-    ArcaneSurgeCooldown,
-    ColdSnapCooldown,
-    ConeOfColdCooldown,
-    FireBlastCooldown,
-    FrostNovaCooldown,
-    IciclesCooldown,
-    TemporalConvergenceCooldown,
-)
-from turtlewowsim.mage_talents import MageTalents
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,
     SPELL_HAS_TRAVEL_TIME,
@@ -28,6 +16,19 @@ from turtlewowsim.spell import (
 )
 from turtlewowsim.spell_school import DamageType
 from turtlewowsim.talent_school import TalentSchool
+
+from .options import MageOptions
+from .rotation_cooldowns import (
+    ArcaneRuptureCooldown,
+    ArcaneSurgeCooldown,
+    ColdSnapCooldown,
+    ConeOfColdCooldown,
+    FireBlastCooldown,
+    FrostNovaCooldown,
+    IciclesCooldown,
+    TemporalConvergenceCooldown,
+)
+from .talents import MageTalents
 
 
 @simclass(MageTalents, MageOptions)
