@@ -1,6 +1,7 @@
 from turtlewowsim import JUSTIFY
+from turtlewowsim.classes import Mage
 from turtlewowsim.env import Environment
-from turtlewowsim.mage import Mage, Spell
+from turtlewowsim.spell import Spell
 
 IGNITE_WINDOW = 6
 IGNITE_TICK_TIME = 2
