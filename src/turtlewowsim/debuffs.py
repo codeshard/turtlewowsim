@@ -1,8 +1,8 @@
 from enum import Enum
 
 from turtlewowsim.character import Character
+from turtlewowsim.classes import ImprovedShadowBolt
 from turtlewowsim.ignite import Ignite
-from turtlewowsim.improved_shadow_bolt import ImprovedShadowBolt
 from turtlewowsim.spell_school import DamageType
 
 
