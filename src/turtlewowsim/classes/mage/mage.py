@@ -3,9 +3,9 @@ from functools import partial
 
 from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
+from turtlewowsim.dots import FireballDot, PyroblastDot
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
-from turtlewowsim.fire_dots import FireballDot, PyroblastDot
 from turtlewowsim.hot_streak import HotStreak
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,

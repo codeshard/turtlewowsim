@@ -1,12 +1,11 @@
 import random
 from functools import partial
 
-from turtlewowsim.arcane_dots import MoonfireDot
 from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
+from turtlewowsim.dots import InsectSwarmDot, MoonfireDot
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
-from turtlewowsim.nature_dots import InsectSwarmDot
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,
     SPELL_HAS_TRAVEL_TIME,

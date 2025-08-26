@@ -4,14 +4,14 @@ from functools import partial
 from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.cooldowns import Cooldown
 from turtlewowsim.decorators import simclass, simrotation
-from turtlewowsim.env import Environment
-from turtlewowsim.equipped_items import EquippedItems
-from turtlewowsim.fire_dots import ImmolateDot
-from turtlewowsim.shadow_dots import (
+from turtlewowsim.dots import (
     CorruptionDot,
     CurseOfAgonyDot,
+    ImmolateDot,
     SiphonLifeDot,
 )
+from turtlewowsim.env import Environment
+from turtlewowsim.equipped_items import EquippedItems
 from turtlewowsim.spell import (
     SPELL_COEFFICIENTS,
     SPELL_HAS_TRAVEL_TIME,
