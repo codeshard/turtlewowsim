@@ -1,6 +1,6 @@
 from turtlewowsim import JUSTIFY
+from turtlewowsim.character import Character
 from turtlewowsim.env import Environment
-from turtlewowsim.warlock import Character
 
 ISB_DURATION = 10
 

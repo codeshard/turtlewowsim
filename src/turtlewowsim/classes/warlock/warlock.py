@@ -21,8 +21,9 @@ from turtlewowsim.spell import (
 )
 from turtlewowsim.spell_school import DamageType
 from turtlewowsim.talent_school import TalentSchool
-from turtlewowsim.warlock_options import WarlockOptions
-from turtlewowsim.warlock_talents import WarlockTalents
+
+from .options import WarlockOptions
+from .talents import WarlockTalents
 
 
 class ConflagrateCooldown(Cooldown):

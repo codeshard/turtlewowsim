@@ -4,12 +4,6 @@ from functools import partial
 from turtlewowsim.arcane_dots import MoonfireDot
 from turtlewowsim.character import Character, CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
-from turtlewowsim.druid_options import DruidOptions
-from turtlewowsim.druid_rotation_cooldowns import (
-    ArcaneEclipseCooldown,
-    NatureEclipseCooldown,
-)
-from turtlewowsim.druid_talents import DruidTalents
 from turtlewowsim.env import Environment
 from turtlewowsim.equipped_items import EquippedItems
 from turtlewowsim.nature_dots import InsectSwarmDot
@@ -22,6 +16,13 @@ from turtlewowsim.spell import (
 )
 from turtlewowsim.spell_school import DamageType
 from turtlewowsim.talent_school import TalentSchool
+
+from .options import DruidOptions
+from .rotation_cooldowns import (
+    ArcaneEclipseCooldown,
+    NatureEclipseCooldown,
+)
+from .talents import DruidTalents
 
 
 @simclass(DruidTalents, DruidOptions)
