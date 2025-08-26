@@ -1,8 +1,9 @@
 import random
 
-from turtlewowsim.dot import Dot
 from turtlewowsim.spell import Spell as MageSpell
 from turtlewowsim.spell_school import DamageType
+
+from .dot import Dot
 
 
 class InsectSwarmDot(Dot):

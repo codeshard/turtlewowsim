@@ -1,9 +1,10 @@
 import random
 
-from turtlewowsim.dot import Dot
 from turtlewowsim.spell import Spell
 from turtlewowsim.spell_school import DamageType
 from turtlewowsim.talent_school import TalentSchool
+
+from .dot import Dot
 
 
 class WarlockShadowDot(Dot):
