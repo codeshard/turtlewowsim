@@ -8,7 +8,7 @@ from turtlewowsim.spell_school import DamageType
 
 class SharedDebuffNames(Enum):
     WINTERS_CHILL = "5 stack Winter's Chill"
-    SCORCH = "5 stack Scorch"
+    FIRE_VULNERABILITY = "5 stack Fire Vulnerability"
     FREEZING_COLD = "Freezing Cold"
 
 
@@ -23,8 +23,8 @@ class Debuffs:
         permanent_nightfall=False,
     ):
         self.env = env
-        self.scorch_stacks = 0
-        self.scorch_timer = 0
+        self.fire_vuln_stacks = 0
+        self.fire_vuln_timer = 0
         self.permanent_coe = permanent_coe
         self.permanent_cos = permanent_cos
         self.permanent_nightfall = permanent_nightfall
@@ -108,8 +108,8 @@ class Debuffs:
             dmg *= 1.1
 
         if damage_type == DamageType.FIRE:
-            if self.scorch_stacks:
-                dmg *= 1 + self.scorch_stacks * 0.03
+            if self.fire_vuln_stacks:
+                dmg *= 1 + self.fire_vuln_stacks * 0.03
             if self.freezing_cold_timer > 0:
                 dmg *= 1.05
 
@@ -131,12 +131,12 @@ class Debuffs:
 
         return dmg
 
-    def add_scorch(self):
-        if self.scorch_stacks == 4:
-            self.track_debuff_start(SharedDebuffNames.SCORCH)
+    def add_fire_vuln(self):
+        if self.fire_vuln_stacks == 4:
+            self.track_debuff_start(SharedDebuffNames.FIRE_VULNERABILITY)
 
-        self.scorch_stacks = min(self.scorch_stacks + 1, 5)
-        self.scorch_timer = 30
+        self.fire_vuln_stacks = min(self.fire_vuln_stacks + 1, 5)
+        self.fire_vuln_timer = 30
 
     def add_freezing_cold(self):
         if self.freezing_cold_timer <= 0:
@@ -193,8 +193,8 @@ class Debuffs:
         time_since_last_tick = self.env.now - dot.last_tick_time
         time_until_next_tick = dot.time_between_ticks - time_since_last_tick
 
-        # Total time =
-        # time until next tick + time for remaining ticks after that
+        # Total time = time until next tick + time for remaining ticks after
+        # that
         remaining_ticks_after_next = max(0, dot.ticks_left - 1)
         total_time_left = time_until_next_tick + (
             remaining_ticks_after_next * dot.time_between_ticks
@@ -223,11 +223,11 @@ class Debuffs:
 
             self.ticks += 1
 
-            if self.scorch_stacks > 0:
-                self.scorch_timer = max(self.scorch_timer - 1, 0)
-                if self.scorch_timer <= 0:
-                    self.scorch_stacks = 0
-                    self.track_debuff_end(SharedDebuffNames.SCORCH)
+            if self.fire_vuln_stacks > 0:
+                self.fire_vuln_timer = max(self.fire_vuln_timer - 1, 0)
+                if self.fire_vuln_timer <= 0:
+                    self.fire_vuln_stacks = 0
+                    self.track_debuff_end(SharedDebuffNames.FIRE_VULNERABILITY)
 
             if self.wc_stacks > 0:
                 self.wc_timer = max(self.wc_timer - 1, 0)
