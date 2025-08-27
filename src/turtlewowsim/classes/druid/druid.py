@@ -1,7 +1,8 @@
 import random
 from functools import partial
 
-from turtlewowsim.character import Character, CooldownUsages
+from turtlewowsim.character import Character
+from turtlewowsim.cooldown_usages import CooldownUsages
 from turtlewowsim.decorators import simclass, simrotation
 from turtlewowsim.dots import InsectSwarmDot, MoonfireDot
 from turtlewowsim.env import Environment
