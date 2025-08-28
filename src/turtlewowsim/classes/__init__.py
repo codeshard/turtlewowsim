@@ -4,6 +4,7 @@ from turtlewowsim.classes.druid.talents import (
     BalanceDruidTalents,
     DruidTalents,
 )
+from turtlewowsim.classes.mage.ignite import Ignite
 from turtlewowsim.classes.mage.mage import Mage
 from turtlewowsim.classes.mage.options import MageOptions
 from turtlewowsim.classes.mage.talents import (
@@ -26,6 +27,7 @@ __all__ = [
     "ArcaneMageTalents",
     "IcicleMageTalents",
     "MageTalents",
+    "Ignite",
     "Druid",
     "DruidTalents",
     "BalanceDruidTalents",
